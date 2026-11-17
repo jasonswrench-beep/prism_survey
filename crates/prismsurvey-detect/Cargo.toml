@@ -1,0 +1,22 @@
+[package]
+name = "prismsurvey-detect"
+description = "Finds a measure in a journal article: the words of each page with their positions, reading order, candidate measures, and their parse into a scale."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+prismsurvey-core = { path = "../prismsurvey-core" }
+prismsurvey-import = { path = "../prismsurvey-import" }
+serde.workspace = true
+serde_json.workspace = true
+regex.workspace = true
+pdf-extract.workspace = true
+hayro.workspace = true
+image.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { version = "0.62", features = ["Foundation", "Foundation_Collections", "Globalization", "Graphics_Imaging", "Media_Ocr", "Storage_Streams"] }

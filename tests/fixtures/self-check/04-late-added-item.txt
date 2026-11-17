@@ -1,0 +1,31 @@
+Cycling Attitude-7 Scale
+
+Below are several descriptions of how you may feel. Please use the scale below to rate the degree to which each statement applies to you.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. Cyclists slow down traffic.
+
+_____2. Cycling is a sensible way to commute.
+
+_____3. I would not want a cycle lane on my street.
+
+_____4. I would happily share the road with cyclists.
+
+_____5. Cyclists should pay a road tax.
+
+_____6. Bicycles belong on main roads.
+
+_____7. Cyclists should be allowed on every road.
+
+Scoring:  To compute your score, add your scores for each item as indicated below:
+
+Recode questions 2, 4, & 6 with the following format:
+1	=	5
+2	=	4
+3	=	3
+4	=	2
+5	=	1
+
+After you have recoded the previous questions, add all of the numbers together to get your composite cycling attitude score.

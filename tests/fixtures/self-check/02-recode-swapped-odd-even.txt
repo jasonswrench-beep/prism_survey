@@ -1,0 +1,34 @@
+Kitchen Talk Scale
+
+Instructions: Below are statements about how your housemate talks while cooking. Indicate how often each happens.
+
+1 = Never; 2 = Rarely; 3 = Occasionally; 4 = Often; 5 = Very Often
+
+_____1. My housemate tells me which spices to add.
+
+_____2. My housemate points at the pan that needs stirring.
+
+_____3. My housemate does not tell me which spices to add.
+
+_____4. My housemate does not point at the pan that needs stirring.
+
+_____5. My housemate explains each step out loud.
+
+_____6. My housemate shows me each step with gestures.
+
+_____7. My housemate does not explain each step out loud.
+
+_____8. My housemate does not show me each step with gestures.
+
+_____9. My housemate talks while cooking.
+
+_____10. My housemate nods while cooking.
+
+_____11. My housemate does not talk while cooking.
+
+_____12. My housemate does not nod while cooking.
+
+Odd Items measure spoken kitchen talk
+Even Items measure gestured kitchen talk
+
+Recode items:  3, 4, 7, 8, 9, 10

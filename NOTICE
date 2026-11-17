@@ -1,0 +1,27 @@
+Prism Survey
+Copyright 2026 Jason S. Wrench and the Prism Survey contributors
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+---
+
+Third-party components:
+
+The Rust crates built into the program are listed, each with its license, in THIRD-PARTY.md. All are under
+permissive terms (MIT, Apache 2.0, BSD, Zlib, Unicode); where a crate offers a choice, the MIT or Apache 2.0
+terms are used.
+
+The Word 97-2003 reader follows Microsoft's published [MS-DOC] file format specification.
+
+The PDF text and page drawing code adapts PrismQDA's PDF importer and page viewer (Apache License 2.0, same author).
+Text recognition calls the recogniser built into Windows; no recognition engine is bundled.

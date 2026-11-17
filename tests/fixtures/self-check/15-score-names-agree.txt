@@ -1,0 +1,24 @@
+Theatre Nerves-4
+
+This instrument is composed of four statements about the stage.  Please indicate the degree to which each statement applies to you by marking whether you:
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. I shake before going on stage.
+
+_____2. I forget my lines.
+
+_____3. I avoid auditions.
+
+_____4. I feel sick in the wings.
+
+Scoring:  To compute your scores, add your scores for each item as indicated below:
+
+After you have recoded the previous questions, follow the following to see your composite Theatre Nerves score
+
+Add questions 1-2 for your basic Body Score		________
+
+Add questions 3-4 for your basic Avoidance Score		________
+
+Add the two subscales together to get your Overall Stage Fright Score	________

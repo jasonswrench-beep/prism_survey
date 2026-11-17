@@ -1,0 +1,22 @@
+Shouting Scale
+
+Read the following questions and select the answer that corresponds with what you would do in most situations. Please use the scale below to rate the degree to which each statement applies to you.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. I am careful never to raise my voice at another person.
+
+_____2. When I get upset, I tend to shout.
+
+_____3. When I am annoyed, I yell at the television.
+
+_____4. I would never shout to win an argument.
+
+_____5. I raise my voice to get my way.
+
+_____6. I avoid raising my voice even when I am angry.
+
+Loud Factor:  2, 3, 5
+
+Quiet Factor:  1, 4, 6

@@ -1,0 +1,30 @@
+Hiking Habits-8
+
+This instrument is composed of eight statements about hiking. Please indicate the degree to which each statement applies to you by marking whether you:
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. I hike every weekend.
+
+_____2. I plan hikes a month ahead.
+
+_____3. I carry a paper map.
+
+_____4. I check the forecast before I leave.
+
+_____5. I hike alone.
+
+_____6. I prefer long trails.
+
+_____7. I take photographs on the trail.
+
+_____8. I keep a hiking diary.
+
+Scoring:  To compute your scores, add your scores for each item as indicated below:
+
+Add questions 1-4 for your basic Planning Score		________
+
+Add questions 5-8 for your basic Enjoyment Score		________
+
+Add the two subscales together to get your Overall Hiking Score	________

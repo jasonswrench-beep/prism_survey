@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">PrismSurvey app icon</title>
+  <desc id="desc">A transparent-background clipboard checklist drawn with cyan, blue, violet, magenta, coral, and gold prism gradients.</desc>
+  <defs>
+    <linearGradient id="frame" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#04F3EC"/>
+      <stop offset="0.26" stop-color="#00B8FF"/>
+      <stop offset="0.50" stop-color="#285BFC"/>
+      <stop offset="0.73" stop-color="#713CF5"/>
+      <stop offset="1" stop-color="#EF00D9"/>
+    </linearGradient>
+    <linearGradient id="clip" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFF36E"/>
+      <stop offset="0.3" stop-color="#FFC235"/>
+      <stop offset="0.62" stop-color="#FF8B62"/>
+      <stop offset="1" stop-color="#E72DF2"/>
+    </linearGradient>
+    <linearGradient id="square1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#34F8F2"/><stop offset="1" stop-color="#118BFF"/></linearGradient>
+    <linearGradient id="square2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#91C8FF"/><stop offset="0.55" stop-color="#A264FF"/><stop offset="1" stop-color="#BC16E8"/></linearGradient>
+    <linearGradient id="square3" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#FFDD52"/><stop offset="0.55" stop-color="#FF935A"/><stop offset="1" stop-color="#F52FB8"/></linearGradient>
+    <linearGradient id="line1" x1="0%" y1="0%" x2="100%" y2="0%"><stop stop-color="#02E7ED"/><stop offset="1" stop-color="#297BFF"/></linearGradient>
+    <linearGradient id="line2" x1="0%" y1="0%" x2="100%" y2="0%"><stop stop-color="#85B2FF"/><stop offset="1" stop-color="#ED20DC"/></linearGradient>
+    <linearGradient id="line3" x1="0%" y1="0%" x2="100%" y2="0%"><stop stop-color="#E92BE8"/><stop offset="0.5" stop-color="#FA6495"/><stop offset="1" stop-color="#FFC82C"/></linearGradient>
+    </defs>
+  <!-- All space outside the clipboard is fully transparent. -->
+  <rect x="91" y="116" width="330" height="348" rx="40" fill="none" stroke="url(#frame)" stroke-width="22"/>
+  <!-- Clip with transparent punched-through hole. -->
+  <path fill="url(#clip)" fill-rule="evenodd" d="M 198 101 C 200 72 223 48 256 48 C 289 48 312 72 314 101 H 325 C 339 101 349 111 349 125 L 349 138 C 349 151 338 161 325 161 H 187 C 174 161 163 151 163 138 V 125 C 163 111 173 101 187 101 Z M 256 79 A 15 15 0 1 0 256 109 A 15 15 0 1 0 256 79 Z"/>
+  <!-- Three survey choices with midnight-blue checks, as in the approved visual. -->
+  <rect x="126" y="190" width="66" height="65" rx="15" fill="url(#square1)"/>
+  <rect x="126" y="277" width="66" height="65" rx="15" fill="url(#square2)"/>
+  <rect x="126" y="364" width="66" height="65" rx="15" fill="url(#square3)"/>
+  <g fill="none" stroke="#15224E" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M 142 223 L 153 234 L 176 211"/>
+    <path d="M 142 310 L 153 321 L 176 298"/>
+    <path d="M 142 397 L 153 408 L 176 385"/>
+  </g>
+  <rect x="223" y="214" width="137" height="18" rx="9" fill="url(#line1)"/>
+  <rect x="223" y="301" width="137" height="18" rx="9" fill="url(#line2)"/>
+  <rect x="223" y="388" width="137" height="18" rx="9" fill="url(#line3)"/>
+</svg>

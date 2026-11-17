@@ -1,0 +1,9 @@
+/target
+/app/src-tauri/target
+/app/src-tauri/gen
+/app/ui/node_modules
+/app/ui/dist
+# Test material from Jason's own folders is never committed (spec, house rules).
+/local-check/
+*.doc
+!tests/fixtures/**/*.doc

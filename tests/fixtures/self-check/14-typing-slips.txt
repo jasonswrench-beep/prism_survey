@@ -1,0 +1,16 @@
+Kayak Confidence Scale
+
+Instructions:  Below are descriptions of how you feel in a kayak. Use the following scale to rate each.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. I feel steady in a kayak.
+
+_____2. . I can roll a kayak back upright.
+
+_____3. I did not used a spray deck on my first trip.
+
+_____4. I enjoy paddling in waves.
+
+After you have recoded the previous questions, add all of the numbers together to get your composite kayak confidance score.

@@ -1,0 +1,12 @@
+NAME
+
+Instructions:
+
+Indicate the degree to which each of these statements applies to you by filling in your response in the blanks corresponding to each item: for each statement, place an "x" in the box that corresponds (one "x" per line) with your perception.
+
+SD = Strongly Disagree, D = Disagree,  N = Neutral, A = Agree, and SA = Strongly Agree.
+
+|  |  |SD |D |N |A |SA |
+|1. |I enjoy puzzles. |  |  |  |  |  |
+|2. |I finish crosswords. |  |  |  |  |  |
+|3. |I give up on riddles. |  |  |  |  |  |

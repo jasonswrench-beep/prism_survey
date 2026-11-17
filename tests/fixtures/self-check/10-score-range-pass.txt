@@ -1,0 +1,20 @@
+Tram Knowledge
+
+Instructions:  Below are several descriptions dealing with what you know about the tram line. Please use the scale below to rate each.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+____ 1. I know the tram timetable.
+
+____ 2. I do not know where the tram stops.
+
+____ 3. The tram fares are clear to me.
+
+____ 4. I do not understand the tram zones.
+
+____ 5. I could explain the tram route to a visitor.
+
+Recode: 2 & 4
+
+Score should be between 5 and 25

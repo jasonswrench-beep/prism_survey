@@ -1,0 +1,24 @@
+Map Reading Style Scale
+
+Instructions:  Below are descriptions of how the guide read the map. Use the following scale to rate each.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. The guide used grid references.
+
+_____2. The guide asked where we wanted to go.
+
+_____3. The guide measured distances with the scale bar.
+
+_____4. The guide checked that we agreed on the route.
+
+_____5. The guide did not use grid references.
+
+_____6. The guide did not ask where we wanted to go.
+
+Reverse Code Items 5 & 6
+
+Technical Factor:  1, 3, 5
+
+Shared Factor:  2, 4, 6

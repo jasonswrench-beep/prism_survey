@@ -1,0 +1,29 @@
+[package]
+name = "prismsurvey-cli"
+description = "Prism Survey from the command line: import stored scales, export to Word, and check a whole folder side by side."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[[bin]]
+name = "prismsurvey"
+path = "src/main.rs"
+
+[features]
+# `prismsurvey serve`, the development bridge for trying the interface in a browser. Not in the shipped program.
+dev-server = ["dep:tiny_http", "dep:prismsurvey-api"]
+
+[dependencies]
+prismsurvey-core = { path = "../prismsurvey-core" }
+prismsurvey-import = { path = "../prismsurvey-import" }
+prismsurvey-docx = { path = "../prismsurvey-docx" }
+prismsurvey-detect = { path = "../prismsurvey-detect" }
+prismsurvey-api = { path = "../prismsurvey-api", optional = true }
+serde_json.workspace = true
+tiny_http = { version = "0.12.0", optional = true }
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,17 @@
+[package]
+name = "prismsurvey-docx"
+description = "Writes Prism Survey scales as native Word .docx files, with real styles and tables."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+prismsurvey-core = { path = "../prismsurvey-core" }
+serde.workspace = true
+zip.workspace = true
+
+[dev-dependencies]
+prismsurvey-import = { path = "../prismsurvey-import" }

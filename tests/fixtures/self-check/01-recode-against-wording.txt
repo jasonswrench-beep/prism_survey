@@ -1,0 +1,22 @@
+Library Comfort Scale
+
+Instructions:  Below are several descriptions of how you feel in libraries. Please use the scale below to rate the degree to which each statement applies to you.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. I feel at ease in a library.
+
+_____2. I feel calm when I walk among the shelves.
+
+_____3. I do not feel welcome in a library.
+
+_____4. I feel completely at ease among the library shelves.
+
+_____5. Libraries make me tense.
+
+_____6. I am relaxed when I study in a library.
+
+Recode items 3, 4, and 5
+
+Scores should range between 6 and 30.

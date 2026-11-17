@@ -1,0 +1,29 @@
+Weather Presenter Style Scale
+
+Instructions:  Below are descriptions of the weather presenter. Use the following scale to rate each.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. The presenter quoted rainfall figures.
+
+_____2. The presenter seemed to care about our plans.
+
+_____3. The presenter showed pressure charts.
+
+_____4. The presenter spoke to us as equals.
+
+Precise Factor:  1, 3
+
+Warm Factor:  2, 4
+
+Principal Component Factor Analysis of the Weather Presenter Style Scale
+
+|   |Factor 1 |Factor 2 |
+|1. The presenter quoted rainfall figures. |.712 |.104 |
+|2. The presenter seemed to care about our plans. |.088 |.655 |
+|3. The presenter showed pressure charts. |.690 |.051 |
+|4. The presenter spoke to us as equals. |.120 |.601 |
+
+Factor I - Precise Factor
+Factor II - Friendly Factor

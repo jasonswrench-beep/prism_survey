@@ -1,0 +1,22 @@
+[package]
+name = "prismsurvey-import"
+description = "Reads stored scale documents (.txt, .docx and Word 97-2003 .doc) and parses them into Prism Survey scales."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+publish = false
+
+[dependencies]
+prismsurvey-core = { path = "../prismsurvey-core" }
+serde.workspace = true
+thiserror.workspace = true
+regex.workspace = true
+quick-xml.workspace = true
+zip.workspace = true
+cfb.workspace = true
+encoding_rs.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

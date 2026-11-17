@@ -1,0 +1,28 @@
+Neighbourhood Pride Short Form
+
+Below are several descriptions of how you may feel. Please use the scale below to rate the degree to which each statement applies to you.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+_____1. My neighbourhood is better than the others nearby.
+
+_____2. I respect the habits of other neighbourhoods.
+
+_____3. Other neighbourhoods should copy ours.
+
+_____4. I don't respect the ways of other neighbourhoods.
+
+_____5. I enjoy visiting other neighbourhoods.
+
+_____6. I would rather never visit other neighbourhoods.
+
+Scoring:  To compute your scores, add your scores for each item as indicated below:
+Recode questions 2, 5 with the following format:
+1	=	5
+2	=	4
+3	=	3
+4	=	2
+5	=	1
+
+After you have recoded the previous questions, add all of the numbers together to get your composite neighbourhood pride score.

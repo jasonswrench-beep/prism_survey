@@ -1,0 +1,28 @@
+[package]
+name = "prismsurvey-app"
+version = "0.1.0"
+description = "The Prism Survey desktop app: a Tauri window around the engine and the React interface."
+edition = "2021"
+rust-version = "1.92"
+license = "Apache-2.0"
+authors = ["Prism Survey contributors"]
+publish = false
+
+# The desktop app is its own Cargo workspace, as in the sibling Prism tools: Tauri brings several hundred crates, and
+# keeping it out of the main workspace means `cargo test --workspace` stays fast and the engine never depends on a window.
+[workspace]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+prismsurvey-api = { path = "../../crates/prismsurvey-api" }
+serde_json = "1"
+tauri = { version = "2", features = [] }
+tauri-plugin-dialog = "2"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

@@ -1,0 +1,20 @@
+Election Knowledge
+
+Instructions:  Below are several descriptions dealing with what you know about the election. Please use the scale below to rate each.
+
+Strongly Disagree	Disagree	Neutral	Agree	Strongly Agree
+             1	    	      2 	 	     3 		    4 		           5
+
+____ 1. I know the candidates' positions.
+
+____ 2. I do not feel informed about the election.
+
+____ 3. The voting rules are clear to me.
+
+____ 4. My knowledge of the candidates is limited.
+
+____ 5. I could explain each candidate's platform.
+
+Recode: 2 & 4
+
+Score should be between 5 and 25

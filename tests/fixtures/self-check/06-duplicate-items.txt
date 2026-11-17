@@ -1,0 +1,19 @@
+Picnic Planning Scale
+
+Instructions: Below are statements about planning picnics. Indicate how often each happens.
+
+1 = Never; 2 = Rarely; 3 = Occasionally; 4 = Often; 5 = Very Often
+
+_____1. I check the weather before a picnic.
+
+_____2. I pack the blanket the night before.
+
+_____3. I forget the napkins.
+
+_____4. I invite friends a week ahead.
+
+_____5. I check the weather before a picnic.
+
+_____6. I pack the blanket the night before.
+
+Recode items:  3
