@@ -63,7 +63,8 @@
       "../../addons/comm-directory/directory.json": "addons/comm-directory/directory.json",
       "../../LICENSE": "LICENSE",
       "../../NOTICE": "NOTICE",
-      "../../THIRD-PARTY.md": "THIRD-PARTY.md"
+      "../../THIRD-PARTY.md": "THIRD-PARTY.md",
+      "../ui/src/assets/fonts/Inter-OFL.txt": "Inter-OFL.txt"
     }
   }
 }

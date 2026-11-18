@@ -10,7 +10,7 @@ A Prism tool that turns a published measure into a correctly scored scale for a 
 - Commit everything and tag that commit before building any installer, so each release tag points at the exact commit the build came from. This includes the 0.1.0 signed build.
 - No em dashes in prose written for this project.
 - Repository text names no commercial products and makes no comparisons with products on the market (naming Word where needed is fine).
-- Permissive dependency licences only (MIT, BSD, Apache 2.0, ISC, Zlib); list them in `THIRD-PARTY.md` (`python tools/third_party.py` writes and checks it). One exception, Jason's ruling of 2026-11-17: the five MPL-2.0 crates Tauri needs for the window (cssparser, cssparser-macros, dtoa-short, selectors, option-ext), unchanged. Any other new MPL or copyleft dependency is asked about first.
+- Permissive dependency licences only (MIT, BSD, Apache 2.0, ISC, Zlib); list them in `THIRD-PARTY.md` (`python tools/third_party.py` writes and checks it). Two exceptions, Jason's rulings of 2026-11-17: the five MPL-2.0 crates Tauri needs for the window (cssparser, cssparser-macros, dtoa-short, selectors, option-ext), unchanged; and the Inter typeface (SIL Open Font License 1.1), bundled unchanged with its licence text, as PrismQDA and PrismStatistics bundle it. Any other new MPL or copyleft dependency is asked about first.
 - Anything that needs running is a double-clickable script.
 - AI stays optional: every step works without a model.
 - When a decision could reasonably go either way, ask rather than pick silently.

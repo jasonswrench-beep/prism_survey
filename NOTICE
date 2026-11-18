@@ -28,3 +28,7 @@ Text recognition calls the recogniser built into Windows; no recognition engine 
 
 The 31 interface icons in assets/icons that the icon brief (design/icons) marks as reused are copied unchanged from
 PrismQDA's icon set (Apache License 2.0, same author).
+
+The interface text is set in Inter Variable (Copyright 2016 The Inter Project Authors, SIL Open Font License 1.1),
+bundled as two WOFF2 files in app/ui/src/assets/fonts, the same files PrismQDA and PrismStatistics bundle. The license
+text is in app/ui/src/assets/fonts/Inter-OFL.txt, and the installer places a copy (Inter-OFL.txt) beside this notice.
