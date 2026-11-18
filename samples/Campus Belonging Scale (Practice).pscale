@@ -1,0 +1,140 @@
+{
+  "pscaleVersion": 1,
+  "id": "ee4eeaa6-8726-4187-ab1c-55d7620ce0c0",
+  "title": "Campus Belonging Scale (Practice)",
+  "countSuffix": false,
+  "tags": [
+    "practice",
+    "students"
+  ],
+  "format": "likertBoxGrid",
+  "response": {
+    "points": 5,
+    "anchorSet": "agreement",
+    "labelMode": "every",
+    "labels": [
+      "Strongly Disagree",
+      "Disagree",
+      "Neutral",
+      "Agree",
+      "Strongly Agree"
+    ],
+    "abbreviations": [
+      "SD",
+      "D",
+      "N",
+      "A",
+      "SA"
+    ],
+    "values": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "instructions": {
+    "text": "Indicate the degree to which each of these statements applies to you. For each statement, place an \"x\" in the box that corresponds to your response. Place only one x on each line.",
+    "origin": "house"
+  },
+  "items": [
+    {
+      "number": 1,
+      "text": "I feel at home on this campus.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 2,
+      "text": "People here notice when I am missing.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 3,
+      "text": "I feel like an outsider at this school.",
+      "reverse": {
+        "state": "confirmed",
+        "reason": "Worded against the construct, so it is scored in reverse."
+      }
+    },
+    {
+      "number": 4,
+      "text": "I have a place on campus where I like to spend time.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 5,
+      "text": "I could ask a classmate for help with coursework.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 6,
+      "text": "I often wish I had chosen a different school.",
+      "reverse": {
+        "state": "confirmed",
+        "reason": "Worded against the construct, so it is scored in reverse."
+      }
+    },
+    {
+      "number": 7,
+      "text": "I take part in at least one campus group or activity.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 8,
+      "text": "I am proud to tell people where I study.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    }
+  ],
+  "recode": {
+    "rule": {
+      "kind": "reflect"
+    }
+  },
+  "subscales": [],
+  "scoring": {
+    "subscaleMethod": "sum",
+    "totalMethod": "sum",
+    "totalFrom": "items",
+    "hasTotal": true,
+    "totalName": "Campus belonging total",
+    "interpretation": [
+      "Practice scale: there are no norms for these scores."
+    ]
+  },
+  "scoreRange": {
+    "stated": [
+      8.0,
+      40.0
+    ],
+    "computed": [
+      8.0,
+      40.0
+    ]
+  },
+  "sourcePlacement": "underScale",
+  "licence": {
+    "status": "open",
+    "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+  },
+  "provenance": [],
+  "history": [
+    {
+      "version": 1,
+      "savedAt": "2026-11-18T02:31:38Z",
+      "summary": "Practice scale made for Prism Survey"
+    }
+  ]
+}

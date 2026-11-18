@@ -64,7 +64,11 @@
       "../../LICENSE": "LICENSE",
       "../../NOTICE": "NOTICE",
       "../../THIRD-PARTY.md": "THIRD-PARTY.md",
-      "../ui/src/assets/fonts/Inter-OFL.txt": "Inter-OFL.txt"
+      "../ui/src/assets/fonts/Inter-OFL.txt": "Inter-OFL.txt",
+      "../../samples/Campus Belonging Scale (Practice).pscale": "samples/Campus Belonging Scale (Practice).pscale",
+      "../../samples/Study Habits Scale (Practice).pscale": "samples/Study Habits Scale (Practice).pscale",
+      "../../samples/Weekend Plans Scale (Practice).pscale": "samples/Weekend Plans Scale (Practice).pscale",
+      "../../samples/Sample Questionnaire.pstudy": "samples/Sample Questionnaire.pstudy"
     }
   }
 }

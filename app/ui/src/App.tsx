@@ -120,6 +120,8 @@ export function App() {
   const [editingPart, setEditingPart] = useState<number | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
+  const tab: 'scales' | 'questionnaire' | 'directory' = view === 'study' ? 'questionnaire' : view === 'directory' ? 'directory' : 'scales';
+  const goTab = (t: 'scales' | 'questionnaire' | 'directory') => setView(t === 'questionnaire' ? 'study' : t === 'directory' ? 'directory' : variantOf ? 'variant' : 'scale');
   const say = (text: string) => setStatus({ kind: 'info', text });
   const fail = (e: unknown) => setStatus({ kind: 'error', text: errorText(e) });
 
@@ -328,22 +330,24 @@ export function App() {
     setStudyDirty(true);
   };
 
+  const confirmStudyDiscard = () => !study || !studyDirty || window.confirm('The open questionnaire has changes that are not saved. Leave them?');
+
   async function newStudy() {
-    if (study && studyDirty && !window.confirm('The open study has changes that are not saved. Leave them?')) return;
+    if (!confirmStudyDiscard()) return;
     try {
-      setStudy(await call<Study>('study.new', { title: 'New study' }));
+      setStudy(await call<Study>('study.new', { title: 'New questionnaire' }));
       setStudyPath(null);
       setStudyDirty(true);
       setView('study');
-      say('A new study. Add scales from the library with the Add buttons beside them.');
+      say('A new questionnaire. Add scales and blocks from the panel on the left.');
     } catch (e) {
       fail(e);
     }
   }
 
   async function openStudy() {
-    if (study && studyDirty && !window.confirm('The open study has changes that are not saved. Leave them?')) return;
-    const p = await pickFile('Open a study', ['pstudy'], 'Prism Survey studies');
+    if (!confirmStudyDiscard()) return;
+    const p = await pickFile('Open a questionnaire', ['pstudy'], 'Prism Survey questionnaires');
     if (!p) return;
     try {
       setStudy(await call<Study>('study.open', { path: p }));
@@ -356,11 +360,25 @@ export function App() {
     }
   }
 
+  /// The sample questionnaire opens as a new, unsaved copy, so saving asks where to keep it.
+  async function openSample(p: string) {
+    if (!confirmStudyDiscard()) return;
+    try {
+      setStudy(await call<Study>('study.open', { path: p }));
+      setStudyPath(null);
+      setStudyDirty(true);
+      setView('study');
+      say('The sample questionnaire, built from made-up practice scales. Change anything; saving keeps your own copy.');
+    } catch (e) {
+      fail(e);
+    }
+  }
+
   async function saveStudy(as: boolean) {
     if (!study || !settings) return;
     let target = studyPath;
     if (!target || as) {
-      target = await pickSave('Save the study', joinPath(settings.libraryFolder, safeName(study.title) + '.pstudy'), ['pstudy'], 'Prism Survey study');
+      target = await pickSave('Save the questionnaire', joinPath(settings.libraryFolder, safeName(study.title) + '.pstudy'), ['pstudy'], 'Prism Survey questionnaire');
       if (!target) return;
     }
     try {
@@ -368,7 +386,7 @@ export function App() {
       setStudy(saved);
       setStudyPath(target);
       setStudyDirty(false);
-      say(`Saved the study to ${target}.`);
+      say(`Saved the questionnaire to ${target}.`);
     } catch (e) {
       fail(e);
     }
@@ -376,11 +394,11 @@ export function App() {
 
   async function exportStudy(copy: 'respondent' | 'researcher') {
     if (!study) return;
-    const target = await pickSave('Export the study to Word', `${safeName(study.title)} - ${copy} copy.docx`, ['docx'], 'Word document');
+    const target = await pickSave('Export the questionnaire to Word', `${safeName(study.title)} - ${copy} copy.docx`, ['docx'], 'Word document');
     if (!target) return;
     try {
       const r = await call<{ notes: string[] }>('study.export', { study, path: target, copy });
-      say([`Exported the study's ${copy} copy to ${target}.`, ...r.notes].join(' '));
+      say([`Exported the questionnaire's ${copy} copy to ${target}.`, ...r.notes.map((n) => n.replace('The study has', 'The questionnaire has'))].join(' '));
     } catch (e) {
       fail(e);
     }
@@ -390,7 +408,7 @@ export function App() {
     if (!study) return;
     try {
       changeStudy(await call<Study>('study.addScale', { study, path }));
-      say('Added to the study.');
+      say('Added to the questionnaire.');
     } catch (e) {
       fail(e);
     }
@@ -415,7 +433,7 @@ export function App() {
     load(sc, null, [], false);
     setEditingPart(index);
     setView('scale');
-    say("Editing the study's copy of this scale. Use Back to the study to put the changes back.");
+    say("Editing the questionnaire's copy of this scale. Use Back to the questionnaire to put the changes back.");
   }
 
   function backToStudy() {
@@ -423,6 +441,7 @@ export function App() {
       const parts = study.parts.map((p, k) => (k === editingPart && p.kind === 'scale' ? { ...p, scale } : p));
       changeStudy({ ...study, parts });
       setDirty(false);
+      say("The scale's changes are back in the questionnaire.");
     }
     setEditingPart(null);
     setView('study');
@@ -519,7 +538,8 @@ export function App() {
     const onKey = (ev: KeyboardEvent) => {
       if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
         ev.preventDefault();
-        saveScale(ev.shiftKey);
+        if (view === 'study') saveStudy(ev.shiftKey);
+        else saveScale(ev.shiftKey);
       } else if (ev.key === 'F8') {
         ev.preventDefault();
         const unresolved = Array.from(formRef.current?.querySelectorAll<HTMLElement>('[data-unsure="true"]') ?? []);
@@ -547,6 +567,70 @@ export function App() {
           Prism Survey
         </span>
       </div>
+      <div className="tabs" role="tablist" aria-label="Workspaces">
+        {(
+          [
+            ['scales', 'Scales'],
+            ['questionnaire', 'Questionnaire'],
+            ['directory', 'Comm Directory'],
+          ] as const
+        ).map(([key, label]) => (
+          <button
+            key={key}
+            role="tab"
+            id={`tab-${key}`}
+            aria-selected={tab === key}
+            tabIndex={tab === key ? 0 : -1}
+            onClick={() => goTab(key)}
+            onKeyDown={(e) => {
+              const order = ['scales', 'questionnaire', 'directory'] as const;
+              const k = order.indexOf(key);
+              const to = e.key === 'ArrowRight' ? order[(k + 1) % 3] : e.key === 'ArrowLeft' ? order[(k + 2) % 3] : null;
+              if (to) {
+                e.preventDefault();
+                goTab(to);
+                document.getElementById(`tab-${to}`)?.focus();
+              }
+            }}
+          >
+            {label}
+            {key === 'questionnaire' && study && studyDirty && <span className="sr-only"> (not saved)</span>}
+            {key === 'questionnaire' && study && studyDirty && <span className="tab-dot" aria-hidden="true" />}
+          </button>
+        ))}
+      </div>
+      {tab === 'questionnaire' ? (
+        <header className="toolbar" role="toolbar" aria-label="Questionnaire commands">
+          <div className="group" role="group" aria-label="Questionnaire">
+            <button onClick={newStudy}>
+              <Icon name="study-new" />
+              New questionnaire
+            </button>
+            <button onClick={openStudy}>
+              <Icon name="cmd-open" />
+              Open…
+            </button>
+            <button className="primary" onClick={() => saveStudy(false)} disabled={!study}>
+              <Icon name="ui-save" />
+              {studyPath ? 'Save' : 'Save…'}
+            </button>
+            <button onClick={() => saveStudy(true)} disabled={!study}>
+              <Icon name="cmd-save-as" />
+              Save as…
+            </button>
+          </div>
+          <div className="group" role="group" aria-label="Word export">
+            <button onClick={() => exportStudy('respondent')} disabled={!study}>
+              <Icon name="exp-respondent" />
+              Export respondent copy…
+            </button>
+            <button onClick={() => exportStudy('researcher')} disabled={!study}>
+              <Icon name="exp-researcher" />
+              Export researcher copy…
+            </button>
+          </div>
+        </header>
+      ) : (
       <header className="toolbar" role="toolbar" aria-label="Scale commands">
         <div className="group" role="group" aria-label="New scale">
           <span className="group-label">New</span>
@@ -571,10 +655,6 @@ export function App() {
           <button onClick={() => importFile()}>
             <Icon name="cmd-import" />
             Import stored scale…
-          </button>
-          <button onClick={() => setView('directory')} aria-pressed={view === 'directory'}>
-            <Icon name="view-directory" />
-            Comm Directory
           </button>
           <button onClick={() => openFile()}>
             <Icon name="cmd-open" />
@@ -607,47 +687,24 @@ export function App() {
             Copy for Word
           </button>
         </div>
-        <div className="group" role="group" aria-label="Study">
-          <span className="group-label">Study</span>
-          <button onClick={newStudy}>
-            <Icon name="study-new" />
-            New
-          </button>
-          <button onClick={openStudy}>
-            <Icon name="cmd-open" />
-            Open…
-          </button>
-          {study && view === 'scale' && (
-            <button onClick={backToStudy}>
+        {study && editingPart !== null && view === 'scale' && (
+          <div className="group" role="group" aria-label="Questionnaire">
+            <button className="primary" onClick={backToStudy}>
               <Icon name="view-study" />
-              {editingPart !== null ? 'Back to the study' : 'Show the study'}
+              Back to the questionnaire
             </button>
-          )}
-          {study && view === 'study' && (
-            <>
-              <button className="primary" onClick={() => saveStudy(false)}>
-                <Icon name="ui-save" />
-                {studyPath ? 'Save' : 'Save…'}
-              </button>
-              <button onClick={() => exportStudy('respondent')}>
-                <Icon name="exp-respondent" />
-                Export respondent copy…
-              </button>
-              <button onClick={() => exportStudy('researcher')}>
-                <Icon name="exp-researcher" />
-                Export researcher copy…
-              </button>
-            </>
-          )}
-        </div>
+          </div>
+        )}
         <label className="switch toolbar-check" title="Confirmed articles are saved as answer keys for the accuracy benchmark">
           <input type="checkbox" checked={benchmark} onChange={(e) => setBenchmark(e.target.checked)} />
           <Icon name="cmd-benchmark" />
           Benchmark mode
         </label>
       </header>
+      )}
 
-      <div className="body">
+      <div className={'body' + (tab === 'questionnaire' ? ' no-library' : '')} role="tabpanel" aria-labelledby={`tab-${tab}`}>
+        {tab !== 'questionnaire' && (
         <nav className="library" aria-label="Scale library">
           <h2>Library</h2>
           <p className="folder" title={settings?.libraryFolder}>
@@ -739,9 +796,9 @@ export function App() {
                     {h && h.snippet && query.trim() && h.field !== 'title' && <span className="lib-snippet">{h.snippet}</span>}
                   </button>
                   {study && !e.error && (
-                    <button className="small lib-add" onClick={() => addLibraryScale(e.path)} aria-label={`Add ${e.title} to the study`}>
+                    <button className="small lib-add" onClick={() => addLibraryScale(e.path)} aria-label={`Add ${e.title} to the questionnaire`}>
                       <Icon name="study-add" size={16} />
-                      Add to study
+                      Add to questionnaire
                     </button>
                   )}
                 </li>
@@ -749,8 +806,9 @@ export function App() {
             </ul>
           )}
         </nav>
+        )}
 
-        <main className={'main' + (article && scale && !showCandidates ? ' with-article' : '')} ref={formRef}>
+        <main className={'main' + (tab === 'questionnaire' ? ' qmain-area' : article && scale && !showCandidates ? ' with-article' : '')} ref={formRef}>
           {view === 'variant' && variantOf ? (
             <VariantView
               parentPath={variantOf.path}
@@ -774,8 +832,12 @@ export function App() {
               onStartBlank={(e) => newScale('likertBlankLine', e)}
               fail={fail}
             />
-          ) : study && view === 'study' ? (
+          ) : view === 'study' ? (
             <StudyBuilder
+              library={library}
+              onNew={newStudy}
+              onOpen={openStudy}
+              onOpenSample={openSample}
               study={study}
               setStudy={changeStudy}
               openScale={editStudyScale}
@@ -824,7 +886,7 @@ export function App() {
           !status && (view === 'study' && study ? !studyDirty : !!scale && !dirty) && <Icon name="st-saved" size={16} />
         )}
         {status?.text ??
-          (view === 'study' && study ? (studyDirty ? 'The study is not saved.' : 'The study is saved.') : scale ? (dirty ? 'Not saved.' : 'Saved.') : 'Ready.')}
+          (view === 'study' && study ? (studyDirty ? 'The questionnaire is not saved.' : 'The questionnaire is saved.') : scale ? (dirty ? 'Not saved.' : 'Saved.') : 'Ready.')}
       </footer>
     </div>
   );

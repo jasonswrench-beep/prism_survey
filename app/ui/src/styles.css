@@ -200,7 +200,7 @@ svg.icon.turn-270 {
 /* ---- the frame: title strip, command bar, library and work area, status line ---- */
 .app {
   display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: auto auto auto 1fr auto;
   height: 100%;
   min-width: 0;
   overflow: hidden;
@@ -1171,6 +1171,355 @@ table.items select {
   margin-left: 4px;
 }
 
+/* ---- the workspace tabs under the title strip ---- */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 12px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.tabs button[role='tab'] {
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 14px 8px;
+  color: var(--muted);
+  font-weight: 500;
+}
+.tabs button[role='tab']:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: transparent;
+  color: var(--ink);
+}
+.tabs button[role='tab'][aria-selected='true'] {
+  background: var(--pill);
+  color: var(--accent-ink);
+  border-bottom-color: var(--accent);
+  font-weight: 700;
+}
+.tab-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--c6);
+  margin-left: 2px;
+}
+.body.no-library {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* ---- the Questionnaire tab: an add panel, the boxes in sections, and the details and print options ---- */
+.qmain-area {
+  padding: 18px 20px 40px;
+}
+.qtab {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+}
+.qadd {
+  flex: 1 1 250px;
+  max-width: 310px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.qadd > h2 {
+  margin-bottom: 4px;
+}
+.qadd .field,
+.qside .field {
+  flex: none;
+  margin-bottom: 4px;
+}
+.qside .row .field {
+  flex: 1 1 8rem;
+}
+.qadd > .buttons {
+  margin: 0;
+}
+.qmain {
+  flex: 999 1 520px;
+  min-width: 0;
+  max-width: 920px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.qmain > .panel {
+  margin: 0;
+}
+.qside {
+  flex: 1 1 260px;
+  max-width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.qside > .panel {
+  margin: 0;
+}
+.qgroup {
+  margin: 10px 0 2px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qlist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+.qlist li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 8px;
+  border-radius: 9px;
+}
+.qlist li:hover {
+  background: var(--hover);
+}
+.qlist-text {
+  flex: 1;
+  min-width: 0;
+}
+.qblocks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.qblocks button {
+  justify-content: flex-start;
+  border-style: dashed;
+  background: var(--sunk);
+  padding: 7px 10px;
+  font-size: 13px;
+  text-align: left;
+}
+.qtitle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 8px 20px;
+  padding-bottom: 6px;
+}
+.qtitle .field {
+  flex: 1 1 320px;
+}
+.qtitle .field input {
+  font-size: 16px;
+  font-weight: 600;
+}
+.qchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-bottom: 14px;
+}
+.qchip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  background: var(--wash);
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+.qsection {
+  padding: 0;
+  overflow: hidden;
+}
+.qsection.selected,
+.qcover.selected {
+  border-color: var(--accent);
+}
+.qsection.dragging {
+  opacity: 0.55;
+}
+.qsection-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--line);
+  background: var(--sunk);
+  cursor: grab;
+}
+.qsection-head h2 {
+  flex: 1 1 160px;
+  margin: 0;
+  font-size: 16px;
+}
+.qsection > .qedit {
+  padding: 10px 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+.qboxes {
+  list-style: none;
+  margin: 0;
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+}
+.qbox {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--paper);
+  padding: 9px 10px;
+}
+.qbox:hover {
+  border-color: var(--line-strong);
+}
+.qbox.selected {
+  border: 2px solid var(--accent);
+  padding: 8px 9px;
+  background: var(--pill);
+}
+.qbox.dragging {
+  opacity: 0.5;
+  border-style: dashed;
+}
+.qbox-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+}
+.qbox-main {
+  flex: 1 1 240px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.qbox-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+}
+.qbox-pick {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-weight: 700;
+  text-align: left;
+  color: var(--ink);
+  border-radius: 4px;
+}
+.qbox-pick:hover:not(:disabled) {
+  background: none;
+  color: var(--accent-ink);
+  text-decoration: underline;
+}
+.qbox.selected .qbox-pick,
+.qsection.selected .qsection-head .qbox-pick,
+.qcover.selected .qbox-pick {
+  color: var(--accent-ink);
+}
+.qkind {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qkind:empty {
+  display: none;
+}
+.qmeta {
+  font-size: 12.5px;
+  color: var(--muted);
+}
+.qpreview {
+  font-style: italic;
+  color: var(--ink);
+  font-weight: 400;
+}
+.qmoves {
+  display: inline-flex;
+}
+.qedit {
+  margin-top: 10px;
+}
+.qcover .qedit {
+  margin-top: 12px;
+}
+.qbreak {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-style: dashed;
+  background: var(--sunk);
+}
+.qbreak-line {
+  flex: 1;
+  border-top: 2px dashed var(--line-strong);
+}
+.qpage {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.qdrop {
+  margin: 12px;
+  border: 2px dashed var(--line-strong);
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--sunk);
+}
+.qmain > .qdrop {
+  margin: 0;
+}
+.badge.ok-badge {
+  background: var(--ok-bg);
+  color: var(--ok-ink);
+  border-color: var(--ok-line);
+}
+.qbox-head .badge {
+  margin-left: 0;
+}
+.qfacts {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0 0 10px;
+  font-size: 13px;
+}
+.qfacts dt {
+  color: var(--muted);
+}
+.qfacts dd {
+  margin: 0;
+}
+.qnarrow {
+  flex: 0 1 7rem;
+}
+.qstart {
+  max-width: 720px;
+}
+
 /* ---- narrower windows ---- */
 @media (max-width: 1300px) {
   table.items td.actions {
@@ -1272,6 +1621,17 @@ table.items select {
   }
   .switch input::after {
     content: none;
+  }
+  .tabs button[role='tab'][aria-selected='true'],
+  .qbox.selected,
+  .qsection.selected,
+  .qcover.selected {
+    border: 3px solid Highlight;
+  }
+  .qbox,
+  .qsection,
+  .qblocks button {
+    border-color: CanvasText;
   }
   .variant-table tr.decision-flagged td {
     outline: 2px solid Highlight;

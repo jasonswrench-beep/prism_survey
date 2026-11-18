@@ -15,6 +15,7 @@
 //!   demographics.bank                            -> [BankQuestion with its text]
 //!   coverLetter.template { length }              -> { title, text } (length: short or long)
 //!   coverLetter.placeholders { text }            -> [the bracketed parts still to fill in]
+//!   samples.folder                               -> the practice scales' folder, or null
 //!   scale.editInstructions { scale, text }       -> Scale
 //!   scale.useHouseInstructions { scale, stem? }  -> Scale
 //!   scale.parseSelector { text }                 -> ItemSelector
@@ -172,6 +173,20 @@ fn addon_folders(config: &Path) -> Vec<PathBuf> {
     }
     v.push(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../addons"));
     v
+}
+
+/// Where the practice scales and the sample questionnaire are (decision 80): beside the program (the installer puts
+/// them there), else the repository's own folder when running from source.
+fn samples_folder() -> Option<PathBuf> {
+    let mut v = Vec::new();
+    if let Ok(exe) = std::env::current_exe() {
+        if let Some(dir) = exe.parent() {
+            v.push(dir.join("samples"));
+            v.push(dir.join("resources").join("samples"));
+        }
+    }
+    v.push(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../samples"));
+    v.into_iter().find(|d| d.is_dir())
 }
 
 /// Page pictures go to the window as data URLs.
@@ -481,6 +496,9 @@ impl Api {
                 };
                 Ok(json!({ "title": default_title(length), "text": template(length) }))
             }
+            "samples.folder" => Ok(samples_folder()
+                .map(|d| Value::String(d.to_string_lossy().into_owned()))
+                .unwrap_or(Value::Null)),
             "coverLetter.placeholders" => {
                 let text: String = arg(&args, "text")?;
                 to_value(prismsurvey_core::cover_letter::placeholders(&text))
@@ -1173,6 +1191,63 @@ mod tests {
     fn api() -> (Api, tempfile::TempDir) {
         let dir = tempfile::tempdir().unwrap();
         (Api::new(&dir.path().join("config"), dir.path()), dir)
+    }
+
+    #[test]
+    fn the_practice_scales_open_clean_and_the_sample_questionnaire_exports() {
+        let (mut api, dir) = api();
+        let folder = api.call("samples.folder", Value::Null).unwrap();
+        let folder = PathBuf::from(folder.as_str().expect("the samples folder is found"));
+        let scales = api
+            .call("library.list", json!({ "folder": folder }))
+            .unwrap();
+        let scales = scales.as_array().unwrap();
+        assert_eq!(scales.len(), 3);
+        for e in scales {
+            let s = api
+                .call("scale.open", json!({ "path": e["path"] }))
+                .unwrap();
+            assert!(s["tags"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|t| t == "practice"));
+            assert_eq!(s["licence"]["status"], "open");
+            let c = api.call("scale.check", json!({ "scale": s })).unwrap();
+            let open: Vec<_> = c["findings"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .filter(|f| f["status"] == "open")
+                .collect();
+            assert!(open.is_empty(), "{}: {open:?}", e["title"]);
+        }
+        let st = api
+            .call(
+                "study.open",
+                json!({ "path": folder.join("Sample Questionnaire.pstudy") }),
+            )
+            .unwrap();
+        let kinds: Vec<_> = st["parts"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .map(|p| p["kind"].as_str().unwrap().to_string())
+            .collect();
+        assert_eq!(kinds[0], "coverLetter");
+        assert_eq!(kinds.iter().filter(|k| *k == "section").count(), 3);
+        assert!(st["parts"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .all(|p| p.get("libraryPath").is_none()));
+        let out = dir.path().join("sample.docx");
+        api.call(
+            "study.export",
+            json!({ "study": st, "path": out, "copy": "respondent" }),
+        )
+        .unwrap();
+        assert!(std::fs::metadata(&out).unwrap().len() > 0);
     }
 
     #[test]

@@ -28,6 +28,15 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
     let mut references: Vec<String> = Vec::new();
     let mut k = 0usize;
     let researcher = copy == Copy::Researcher;
+    // True while nothing has been written on the current page, so a section that starts a new page, a cover letter's
+    // own page and "start each scale on a new page" never leave a blank page between them.
+    let mut at_page_top = true;
+    let page_break = |body: &mut String, at_top: &mut bool| {
+        if !*at_top {
+            body.push_str(PAGE_BREAK);
+            *at_top = true;
+        }
+    };
     if researcher {
         body.push_str(
             &P::new("Heading1")
@@ -40,8 +49,9 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
         match part {
             Part::Scale { scale, .. } => {
                 if k > 0 && study.options.break_between_scales {
-                    body.push_str(PAGE_BREAK);
+                    page_break(&mut body, &mut at_page_top);
                 }
+                at_page_top = false;
                 let label = format!("{} {}", study.options.neutral_word.trim(), k + 1);
                 let (show_title, neutral) = match (study.options.titles, researcher) {
                     // The researcher copy always names the scale, with its section label beside it.
@@ -83,10 +93,19 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
                 }
                 k += 1;
             }
-            Part::PageBreak => body.push_str(PAGE_BREAK),
+            Part::PageBreak => page_break(&mut body, &mut at_page_top),
+            Part::Section { title, new_page } => {
+                if *new_page {
+                    page_break(&mut body, &mut at_page_top);
+                }
+                if !title.trim().is_empty() && (researcher || study.options.section_headings) {
+                    body.push_str(&P::new("Heading1").text(title.trim()).keep_next().xml());
+                }
+            }
             Part::Transition { text } => {
                 if !text.trim().is_empty() {
                     body.push_str(&P::new("PSTransition").text(text.trim()).xml());
+                    at_page_top = false;
                 }
             }
             Part::CoverLetter { title, text } => {
@@ -101,6 +120,9 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
                         None => body.push_str(&P::new("PSCoverLetter").text(line.trim()).xml()),
                     }
                 }
+                // The letter has its page to itself: the questions start on the next one.
+                at_page_top = false;
+                page_break(&mut body, &mut at_page_top);
             }
             Part::Demographics { title, text } => {
                 if !title.trim().is_empty() {
@@ -121,16 +143,23 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
                     }
                     body.push_str(&p.xml());
                 }
+                if !lines.is_empty() {
+                    at_page_top = false;
+                }
             }
         }
     }
     if !references.is_empty() {
         references.sort_by_key(|r| r.to_lowercase());
-        body.push_str(PAGE_BREAK);
+        page_break(&mut body, &mut at_page_top);
         body.push_str(&P::new("Heading1").text("References").keep_next().xml());
         for r in references {
             body.push_str(&P::new("PSSource").text(&r).xml());
         }
+    }
+    // A page break with nothing after it would print an empty last page.
+    while body.ends_with(PAGE_BREAK) {
+        body.truncate(body.len() - PAGE_BREAK.len());
     }
     if k == 0 {
         notes.push("The study has no scales yet.".into());
@@ -209,6 +238,43 @@ mod tests {
             "{p:?}"
         );
         assert!(p.contains(&"You are invited to take part.".to_string()));
+    }
+
+    #[test]
+    fn sections_head_their_parts_and_the_cover_letter_has_its_own_page() {
+        let mut st = study();
+        st.parts.insert(
+            1,
+            Part::Section {
+                title: "Your garden".into(),
+                new_page: true,
+            },
+        );
+        st.options.break_between_scales = true;
+        let doc = export_study(&st, Copy::Respondent);
+        let p = paragraphs(&doc.bytes);
+        assert!(p.contains(&"Your garden".to_string()), "{p:?}");
+        let xml = {
+            use std::io::Read;
+            let mut z = zip::ZipArchive::new(std::io::Cursor::new(&doc.bytes)).unwrap();
+            let mut x = String::new();
+            z.by_name("word/document.xml")
+                .unwrap()
+                .read_to_string(&mut x)
+                .unwrap();
+            x
+        };
+        // One break after the letter (the section's own new page is the same one), one before the second scale.
+        assert_eq!(xml.matches(PAGE_BREAK).count(), 2, "{xml}");
+        assert!(!xml.contains(&format!("{PAGE_BREAK}{PAGE_BREAK}")));
+        st.options.section_headings = false;
+        let p = paragraphs(&export_study(&st, Copy::Respondent).bytes);
+        assert!(!p.contains(&"Your garden".to_string()));
+        let p = paragraphs(&export_study(&st, Copy::Researcher).bytes);
+        assert!(
+            p.contains(&"Your garden".to_string()),
+            "the researcher copy keeps section headings"
+        );
     }
 
     #[test]

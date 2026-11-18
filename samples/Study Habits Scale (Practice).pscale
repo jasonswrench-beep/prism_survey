@@ -1,0 +1,144 @@
+{
+  "pscaleVersion": 1,
+  "id": "440ea34f-afd1-4f3b-a230-c549f2cd2db1",
+  "title": "Study Habits Scale (Practice)",
+  "countSuffix": false,
+  "tags": [
+    "practice",
+    "students"
+  ],
+  "format": "semanticDifferential",
+  "response": {
+    "points": 7,
+    "anchorSet": "agreement",
+    "labelMode": "every",
+    "labels": [
+      "Strongly Disagree",
+      "Disagree",
+      "Slightly Disagree",
+      "Neutral",
+      "Slightly Agree",
+      "Agree",
+      "Strongly Agree"
+    ],
+    "abbreviations": [
+      "SD",
+      "D",
+      "SlD",
+      "N",
+      "SlA",
+      "A",
+      "SA"
+    ],
+    "values": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "instructions": {
+    "text": "Below are several oppositely worded adjective pairs. Circle the number between the adjectives which best represents your beliefs. Numbers \"1\" and \"7\" indicate a very strong feeling. Numbers \"2\" and \"6\" indicate a strong feeling. Numbers \"3\" and \"5\" indicate a fairly weak feeling. Number \"4\" indicates you are undecided or do not understand the adjectives themselves. There are no right or wrong answers.",
+    "origin": "house"
+  },
+  "items": [
+    {
+      "number": 1,
+      "text": "",
+      "left": "Disorganized",
+      "right": "Organized",
+      "reverse": {
+        "state": "notReversed"
+      },
+      "leadIn": "My usual way of studying is:"
+    },
+    {
+      "number": 2,
+      "text": "",
+      "left": "Last-minute",
+      "right": "Planned ahead",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 3,
+      "text": "",
+      "left": "Focused",
+      "right": "Distracted",
+      "reverse": {
+        "state": "confirmed",
+        "reason": "Worded against the construct, so it is scored in reverse."
+      }
+    },
+    {
+      "number": 4,
+      "text": "",
+      "left": "Passive",
+      "right": "Active",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 5,
+      "text": "",
+      "left": "Irregular",
+      "right": "Routine",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 6,
+      "text": "",
+      "left": "Rushed",
+      "right": "Unhurried",
+      "reverse": {
+        "state": "notReversed"
+      }
+    }
+  ],
+  "recode": {
+    "rule": {
+      "kind": "reflect"
+    }
+  },
+  "subscales": [],
+  "scoring": {
+    "subscaleMethod": "sum",
+    "totalMethod": "sum",
+    "totalFrom": "items",
+    "hasTotal": true,
+    "totalName": "Study habits total",
+    "interpretation": [
+      "Practice scale: there are no norms for these scores."
+    ]
+  },
+  "scoreRange": {
+    "stated": [
+      6.0,
+      42.0
+    ],
+    "computed": [
+      6.0,
+      42.0
+    ]
+  },
+  "sourcePlacement": "underScale",
+  "licence": {
+    "status": "open",
+    "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+  },
+  "provenance": [],
+  "history": [
+    {
+      "version": 1,
+      "savedAt": "2026-11-18T02:31:38Z",
+      "summary": "Practice scale made for Prism Survey"
+    }
+  ]
+}

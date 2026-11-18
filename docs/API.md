@@ -13,6 +13,10 @@ The window sends every request through one Tauri command, `call`, with a command
 | `scale.setAnchors` | `scale`, `anchorSet`, `labelMode` | `{ scale, outcome }` |
 | `scale.setLabels` | `scale`, `labels` (lowest first) | `{ scale, outcome }`: custom labels on every point when they fit the point count, else the first and last as the ends |
 | `anchors.common` | | the five-point label sets the form offers, lowest first |
+| `samples.folder` | | the folder of the practice scales and the sample questionnaire, or null |
+| `coverLetter.template` | `length` (short or long) | `{ title, text }` |
+| `coverLetter.placeholders` | `text` | the bracketed parts still to fill in or choose |
+| `demographics.bank` | | the ready-made demographic questions, each with the `text` it adds |
 | `scale.editInstructions` | `scale`, `text` | The scale, its instructions now marked edited. |
 | `scale.useHouseInstructions` | `scale`, `stem` (optional) | The scale with house instructions for its format. |
 | `scale.parseSelector` | `text` ("1, 3, 5", "1-5", "odd", "even") | An item selector. |

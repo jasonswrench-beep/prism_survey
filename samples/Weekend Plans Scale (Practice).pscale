@@ -1,0 +1,118 @@
+{
+  "pscaleVersion": 1,
+  "id": "4cd1db80-48dd-4996-b77e-453e22cd5cb7",
+  "title": "Weekend Plans Scale (Practice)",
+  "countSuffix": false,
+  "tags": [
+    "practice",
+    "students"
+  ],
+  "format": "likertBlankLine",
+  "response": {
+    "points": 5,
+    "anchorSet": "frequency",
+    "labelMode": "every",
+    "labels": [
+      "Never",
+      "Rarely",
+      "Occasionally",
+      "Often",
+      "Very Often"
+    ],
+    "abbreviations": [
+      "N",
+      "R",
+      "O",
+      "O",
+      "VO"
+    ],
+    "values": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ]
+  },
+  "instructions": {
+    "text": "Read the following questions and select the answer that corresponds with your perception. Do not be concerned if some of the items appear similar. Please use the scale below to rate the degree to which each statement applies to you.",
+    "origin": "house"
+  },
+  "items": [
+    {
+      "number": 1,
+      "text": "I plan my weekend before Friday.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 2,
+      "text": "I set aside time on weekends for coursework.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 3,
+      "text": "I spend weekends without any plan.",
+      "reverse": {
+        "state": "confirmed",
+        "reason": "Worded against the construct, so it is scored in reverse."
+      }
+    },
+    {
+      "number": 4,
+      "text": "I make plans with friends for the weekend.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    },
+    {
+      "number": 5,
+      "text": "I finish the weekend tasks I set for myself.",
+      "reverse": {
+        "state": "notReversed"
+      }
+    }
+  ],
+  "recode": {
+    "rule": {
+      "kind": "reflect"
+    }
+  },
+  "subscales": [],
+  "scoring": {
+    "subscaleMethod": "sum",
+    "totalMethod": "sum",
+    "totalFrom": "items",
+    "hasTotal": true,
+    "totalName": "Weekend planning total",
+    "interpretation": [
+      "Practice scale: there are no norms for these scores."
+    ]
+  },
+  "scoreRange": {
+    "stated": [
+      5.0,
+      25.0
+    ],
+    "computed": [
+      5.0,
+      25.0
+    ]
+  },
+  "sourcePlacement": "underScale",
+  "licence": {
+    "status": "open",
+    "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+  },
+  "provenance": [],
+  "history": [
+    {
+      "version": 1,
+      "savedAt": "2026-11-18T02:31:38Z",
+      "summary": "Practice scale made for Prism Survey"
+    }
+  ]
+}

@@ -45,6 +45,8 @@ pub struct StudyOptions {
     pub size_pt: u32,
     /// A page break before each scale after the first.
     pub break_between_scales: bool,
+    /// Section headings print on the respondent copy too (the researcher copy always has them).
+    pub section_headings: bool,
 }
 
 impl Default for StudyOptions {
@@ -57,6 +59,7 @@ impl Default for StudyOptions {
             font: "Times New Roman".into(),
             size_pt: 12,
             break_between_scales: false,
+            section_headings: true,
         }
     }
 }
@@ -82,8 +85,15 @@ pub enum Part {
         title: String,
         text: String,
     },
+    /// The start of a named section (decision 79): the parts after it, up to the next section, belong to it and move
+    /// with it. A page break lives here, between sections, as "start on a new page".
+    Section {
+        title: String,
+        #[serde(default)]
+        new_page: bool,
+    },
     /// The letter respondents read before the questions (cover_letter.rs): one paragraph per line, a line starting
-    /// with "## " is a heading.
+    /// with "## " is a heading. It is always the first part and prints on a page of its own.
     CoverLetter {
         title: String,
         text: String,

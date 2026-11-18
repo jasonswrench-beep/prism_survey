@@ -1,0 +1,467 @@
+{
+  "pstudyVersion": 1,
+  "id": "94aa9ddc-85a1-49db-98cf-f50f2da73211",
+  "title": "Sample Questionnaire: Campus Life",
+  "parts": [
+    {
+      "kind": "coverLetter",
+      "title": "About this survey",
+      "text": "You are invited to take part in a research study, Campus Life, conducted by [RESEARCHER NAME] of [DEPARTMENT], [INSTITUTION]. The study asks about how students feel about campus, how they study and how they plan their weekends. The survey takes about 3 minutes, and you must be [AGE] or older to take part. Taking part is your choice.\nYou will answer the questions that follow. None of the procedures is experimental.\nWe do not expect any risks beyond those of everyday life, although some questions may feel personal. You may skip any question you prefer not to answer.\nThere is no direct benefit to you. Your answers may help researchers better understand [WHAT THE STUDY MAY HELP OTHERS UNDERSTAND].\nThe survey does not ask for your name. Your answers will be kept confidential to the extent the law allows and reported only as group results. [HOW THE ANSWERS ARE STORED AND WHO CAN SEE THEM.]\n[CHOOSE ONE AND DELETE THE OTHER: Your answers, with anything that could identify you removed, may be used for future research or shared with other researchers for future research without asking you again. / Your answers will not be used or shared for future research studies, even with anything that could identify you removed.]\nTaking part is voluntary. If you choose not to take part, simply do not complete the survey; there is no penalty and no loss of any benefit to which you are otherwise entitled. You may stop at any time in the same way.\nIf you have questions about the study, contact [RESEARCHER NAME] at [RESEARCHER EMAIL]. If you have questions about your rights as a research participant, or wish to report a research-related problem or injury, contact [IRB NAME] at [IRB EMAIL] or [IRB PHONE]. This study was reviewed by [IRB NAME] (protocol [PROTOCOL NUMBER]).\nBy continuing to the survey, you confirm that you are [AGE] or older and that you agree to take part. You may keep a copy of this page."
+    },
+    {
+      "kind": "section",
+      "title": "Your campus",
+      "new_page": false
+    },
+    {
+      "kind": "transition",
+      "text": "The next questions ask about how you feel on campus and how you spend your weekends."
+    },
+    {
+      "kind": "scale",
+      "scale": {
+        "pscaleVersion": 1,
+        "id": "ee4eeaa6-8726-4187-ab1c-55d7620ce0c0",
+        "title": "Campus Belonging Scale (Practice)",
+        "countSuffix": false,
+        "tags": [
+          "practice",
+          "students"
+        ],
+        "format": "likertBoxGrid",
+        "response": {
+          "points": 5,
+          "anchorSet": "agreement",
+          "labelMode": "every",
+          "labels": [
+            "Strongly Disagree",
+            "Disagree",
+            "Neutral",
+            "Agree",
+            "Strongly Agree"
+          ],
+          "abbreviations": [
+            "SD",
+            "D",
+            "N",
+            "A",
+            "SA"
+          ],
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "instructions": {
+          "text": "Indicate the degree to which each of these statements applies to you. For each statement, place an \"x\" in the box that corresponds to your response. Place only one x on each line.",
+          "origin": "house"
+        },
+        "items": [
+          {
+            "number": 1,
+            "text": "I feel at home on this campus.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 2,
+            "text": "People here notice when I am missing.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 3,
+            "text": "I feel like an outsider at this school.",
+            "reverse": {
+              "state": "confirmed",
+              "reason": "Worded against the construct, so it is scored in reverse."
+            }
+          },
+          {
+            "number": 4,
+            "text": "I have a place on campus where I like to spend time.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 5,
+            "text": "I could ask a classmate for help with coursework.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 6,
+            "text": "I often wish I had chosen a different school.",
+            "reverse": {
+              "state": "confirmed",
+              "reason": "Worded against the construct, so it is scored in reverse."
+            }
+          },
+          {
+            "number": 7,
+            "text": "I take part in at least one campus group or activity.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 8,
+            "text": "I am proud to tell people where I study.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          }
+        ],
+        "recode": {
+          "rule": {
+            "kind": "reflect"
+          }
+        },
+        "subscales": [],
+        "scoring": {
+          "subscaleMethod": "sum",
+          "totalMethod": "sum",
+          "totalFrom": "items",
+          "hasTotal": true,
+          "totalName": "Campus belonging total",
+          "interpretation": [
+            "Practice scale: there are no norms for these scores."
+          ]
+        },
+        "scoreRange": {
+          "stated": [
+            8.0,
+            40.0
+          ],
+          "computed": [
+            8.0,
+            40.0
+          ]
+        },
+        "sourcePlacement": "underScale",
+        "licence": {
+          "status": "open",
+          "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+        },
+        "provenance": [],
+        "history": [
+          {
+            "version": 1,
+            "savedAt": "2026-11-18T02:31:38Z",
+            "summary": "Practice scale made for Prism Survey"
+          }
+        ]
+      },
+      "library_path": "C:/Dev/PrismSurvey/.claude/worktrees/restyle-window-d3069a/samples\\Campus Belonging Scale (Practice).pscale"
+    },
+    {
+      "kind": "scale",
+      "scale": {
+        "pscaleVersion": 1,
+        "id": "4cd1db80-48dd-4996-b77e-453e22cd5cb7",
+        "title": "Weekend Plans Scale (Practice)",
+        "countSuffix": false,
+        "tags": [
+          "practice",
+          "students"
+        ],
+        "format": "likertBlankLine",
+        "response": {
+          "points": 5,
+          "anchorSet": "frequency",
+          "labelMode": "every",
+          "labels": [
+            "Never",
+            "Rarely",
+            "Occasionally",
+            "Often",
+            "Very Often"
+          ],
+          "abbreviations": [
+            "N",
+            "R",
+            "O",
+            "O",
+            "VO"
+          ],
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ]
+        },
+        "instructions": {
+          "text": "Read the following questions and select the answer that corresponds with your perception. Do not be concerned if some of the items appear similar. Please use the scale below to rate the degree to which each statement applies to you.",
+          "origin": "house"
+        },
+        "items": [
+          {
+            "number": 1,
+            "text": "I plan my weekend before Friday.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 2,
+            "text": "I set aside time on weekends for coursework.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 3,
+            "text": "I spend weekends without any plan.",
+            "reverse": {
+              "state": "confirmed",
+              "reason": "Worded against the construct, so it is scored in reverse."
+            }
+          },
+          {
+            "number": 4,
+            "text": "I make plans with friends for the weekend.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 5,
+            "text": "I finish the weekend tasks I set for myself.",
+            "reverse": {
+              "state": "notReversed"
+            }
+          }
+        ],
+        "recode": {
+          "rule": {
+            "kind": "reflect"
+          }
+        },
+        "subscales": [],
+        "scoring": {
+          "subscaleMethod": "sum",
+          "totalMethod": "sum",
+          "totalFrom": "items",
+          "hasTotal": true,
+          "totalName": "Weekend planning total",
+          "interpretation": [
+            "Practice scale: there are no norms for these scores."
+          ]
+        },
+        "scoreRange": {
+          "stated": [
+            5.0,
+            25.0
+          ],
+          "computed": [
+            5.0,
+            25.0
+          ]
+        },
+        "sourcePlacement": "underScale",
+        "licence": {
+          "status": "open",
+          "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+        },
+        "provenance": [],
+        "history": [
+          {
+            "version": 1,
+            "savedAt": "2026-11-18T02:31:38Z",
+            "summary": "Practice scale made for Prism Survey"
+          }
+        ]
+      },
+      "library_path": "C:/Dev/PrismSurvey/.claude/worktrees/restyle-window-d3069a/samples\\Weekend Plans Scale (Practice).pscale"
+    },
+    {
+      "kind": "section",
+      "title": "Studying",
+      "new_page": false
+    },
+    {
+      "kind": "scale",
+      "scale": {
+        "pscaleVersion": 1,
+        "id": "440ea34f-afd1-4f3b-a230-c549f2cd2db1",
+        "title": "Study Habits Scale (Practice)",
+        "countSuffix": false,
+        "tags": [
+          "practice",
+          "students"
+        ],
+        "format": "semanticDifferential",
+        "response": {
+          "points": 7,
+          "anchorSet": "agreement",
+          "labelMode": "every",
+          "labels": [
+            "Strongly Disagree",
+            "Disagree",
+            "Slightly Disagree",
+            "Neutral",
+            "Slightly Agree",
+            "Agree",
+            "Strongly Agree"
+          ],
+          "abbreviations": [
+            "SD",
+            "D",
+            "SlD",
+            "N",
+            "SlA",
+            "A",
+            "SA"
+          ],
+          "values": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        "instructions": {
+          "text": "Below are several oppositely worded adjective pairs. Circle the number between the adjectives which best represents your beliefs. Numbers \"1\" and \"7\" indicate a very strong feeling. Numbers \"2\" and \"6\" indicate a strong feeling. Numbers \"3\" and \"5\" indicate a fairly weak feeling. Number \"4\" indicates you are undecided or do not understand the adjectives themselves. There are no right or wrong answers.",
+          "origin": "house"
+        },
+        "items": [
+          {
+            "number": 1,
+            "text": "",
+            "left": "Disorganized",
+            "right": "Organized",
+            "reverse": {
+              "state": "notReversed"
+            },
+            "leadIn": "My usual way of studying is:"
+          },
+          {
+            "number": 2,
+            "text": "",
+            "left": "Last-minute",
+            "right": "Planned ahead",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 3,
+            "text": "",
+            "left": "Focused",
+            "right": "Distracted",
+            "reverse": {
+              "state": "confirmed",
+              "reason": "Worded against the construct, so it is scored in reverse."
+            }
+          },
+          {
+            "number": 4,
+            "text": "",
+            "left": "Passive",
+            "right": "Active",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 5,
+            "text": "",
+            "left": "Irregular",
+            "right": "Routine",
+            "reverse": {
+              "state": "notReversed"
+            }
+          },
+          {
+            "number": 6,
+            "text": "",
+            "left": "Rushed",
+            "right": "Unhurried",
+            "reverse": {
+              "state": "notReversed"
+            }
+          }
+        ],
+        "recode": {
+          "rule": {
+            "kind": "reflect"
+          }
+        },
+        "subscales": [],
+        "scoring": {
+          "subscaleMethod": "sum",
+          "totalMethod": "sum",
+          "totalFrom": "items",
+          "hasTotal": true,
+          "totalName": "Study habits total",
+          "interpretation": [
+            "Practice scale: there are no norms for these scores."
+          ]
+        },
+        "scoreRange": {
+          "stated": [
+            6.0,
+            42.0
+          ],
+          "computed": [
+            6.0,
+            42.0
+          ]
+        },
+        "sourcePlacement": "underScale",
+        "licence": {
+          "status": "open",
+          "note": "A made-up practice scale that comes with Prism Survey. It has not been tested for reliability or validity; use it to learn the program, not in research."
+        },
+        "provenance": [],
+        "history": [
+          {
+            "version": 1,
+            "savedAt": "2026-11-18T02:31:38Z",
+            "summary": "Practice scale made for Prism Survey"
+          }
+        ]
+      },
+      "library_path": "C:/Dev/PrismSurvey/.claude/worktrees/restyle-window-d3069a/samples\\Study Habits Scale (Practice).pscale"
+    },
+    {
+      "kind": "section",
+      "title": "About you",
+      "new_page": false
+    },
+    {
+      "kind": "demographics",
+      "title": "About you",
+      "text": "What is your age in years? ______\nWhat is your gender?\n☐ Woman\n☐ Man\n☐ Nonbinary\n☐ Prefer to self-describe: ______\n☐ Prefer not to say\nWhat is your year in school?\n☐ First-year\n☐ Second-year\n☐ Third-year\n☐ Fourth-year or beyond\n☐ Graduate student\n☐ Not a student\n☐ Prefer not to say\nAre you enrolled full-time or part-time?\n☐ Full-time\n☐ Part-time\n☐ Not enrolled\n☐ Prefer not to say"
+    }
+  ],
+  "options": {
+    "numbering": "runOn",
+    "titles": "show",
+    "neutralWord": "Section",
+    "sources": "underScale",
+    "font": "Times New Roman",
+    "sizePt": 12,
+    "breakBetweenScales": false,
+    "sectionHeadings": true
+  },
+  "history": [
+    {
+      "version": 1,
+      "savedAt": "2026-11-18T02:31:38Z",
+      "summary": "Sample questionnaire made for Prism Survey"
+    }
+  ]
+}
