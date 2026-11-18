@@ -20,6 +20,15 @@ prismsurvey-api = { path = "../../crates/prismsurvey-api" }
 serde_json = "1"
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2"
+# The Help tab's Check for Updates (updates.rs): asked only when the person presses the button, or once a day if they
+# turned that on; downloads are checked against the update key's signature before they run.
+tauri-plugin-updater = { version = "2", default-features = false, features = ["native-tls", "system-proxy", "zip"] }
+# Return to the previous version accepts only an older version.
+semver = "1"
+
+[dev-dependencies]
+tauri = { version = "2", features = ["test"] }
+tiny_http = "0.12"
 
 [profile.release]
 lto = "thin"

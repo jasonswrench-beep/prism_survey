@@ -2,6 +2,8 @@
 #
 #   powershell -ExecutionPolicy Bypass -File app\BUILD-INSTALLER.ps1          an unsigned installer
 #   powershell -ExecutionPolicy Bypass -File app\BUILD-INSTALLER.ps1 -Sign    a signed and timestamped installer
+#   powershell -ExecutionPolicy Bypass -File app\BUILD-INSTALLER.ps1 -Sign -Updates
+#                                                   the same, also signed for the Help tab's Check for Updates
 #
 # BUILD PRISM SURVEY INSTALLER.bat in the project folder runs the first form.
 #
@@ -18,8 +20,14 @@
 # its signCommand through a temporary configuration beside the build, so no signing setting goes into tauri.conf.json or
 # the repository. check_signatures.py then checks the setup file and every program inside it before the SHA-256 is
 # written, so the hash is the hash of the signed file. The build stops if anything is unsigned or has no timestamp.
+#
+# -Updates (with -Sign) then signs the finished installer with the update key (docs\UPDATES.md): the key is
+# .prismsurvey-update.key in the profile folder (or TAURI_SIGNING_PRIVATE_KEY_PATH), its password comes from
+# TAURI_SIGNING_PRIVATE_KEY_PASSWORD or is asked for, and the build stops before building if PUBKEY in
+# app\src-tauri\src\updates.rs is not the key's public half. It writes latest.json beside the installer, and
+# previous.json (the published release's latest.json) when there is one: attach both to the release with the installer.
 
-param([switch]$Sign)
+param([switch]$Sign, [switch]$Updates)
 
 $ErrorActionPreference = 'Stop'
 if ([Environment]::ProcessorCount -ge 32) {
@@ -38,8 +46,26 @@ if ($pending) { Pop-Location; throw "There are changes not committed. Commit eve
 $tag = git describe --exact-match --tags HEAD 2>$null
 if ($LASTEXITCODE -or -not $tag) { Pop-Location; throw 'This commit has no tag. Tag it (for example v0.1.0) before building, so the release tag points at this build.' }
 $commit = git rev-parse HEAD
+$tagNotes = (git tag -l --format='%(contents)' $tag) -join "`n"
 Pop-Location
 "Building from tag $tag (commit $commit)"
+
+# The update key is checked before anything is built, so a long build never ends in a refusal.
+$updateKey = $null
+if ($Updates) {
+    if (-not $Sign) { throw '-Updates goes with -Sign: an update is a signed installer' }
+    $updateKey = if ($env:TAURI_SIGNING_PRIVATE_KEY_PATH) { $env:TAURI_SIGNING_PRIVATE_KEY_PATH } else { Join-Path $env:USERPROFILE '.prismsurvey-update.key' }
+    if (-not (Test-Path $updateKey)) { throw "There is no update key at $updateKey (MAKE PRISM SURVEY UPDATE KEY.bat makes it)." }
+    if (-not (Test-Path "$updateKey.pub")) { throw "The public half of the update key is not beside it ($updateKey.pub)." }
+    $source = [System.IO.File]::ReadAllText((Join-Path $app 'src-tauri\src\updates.rs'))
+    $m = [regex]::Match($source, 'pub const PUBKEY: &str = "([^"]*)";')
+    if (-not $m.Success -or -not $m.Groups[1].Value) { throw 'PUBKEY in app\src-tauri\src\updates.rs is empty, so the program would never check for updates (MAKE PRISM SURVEY UPDATE KEY.bat puts it there).' }
+    if ($m.Groups[1].Value -ne (Get-Content "$updateKey.pub" -Raw).Trim()) { throw 'PUBKEY in updates.rs is not the public half of the update key; a program built like that would refuse every update.' }
+    if (-not $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD) {
+        $secure = Read-Host -AsSecureString 'Password for the update key (Enter if it has none)'
+        $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure))
+    }
+}
 
 # Leaves the builder's folders out of the program. Rust writes the place of every error message into the program as a
 # full path, so a build would carry the Windows account's folder name and this project's folder. The two prefixes are
@@ -95,5 +121,38 @@ if ($Sign -and -not $dryRun) {
 $hash = (Get-FileHash $installer.FullName -Algorithm SHA256).Hash.ToLower()
 "$hash  $($installer.Name)" | Out-File -Encoding ascii "$($installer.FullName).sha256.txt"
 "Built from tag $tag, commit $commit" | Out-File -Encoding ascii "$($installer.FullName).source.txt"
+
+if ($Updates) {
+    # The update signature covers the exact bytes people download; the code signature above is already inside them.
+    & '..\ui\node_modules\.bin\tauri.cmd' signer sign -f $updateKey $installer.FullName
+    if ($LASTEXITCODE -or -not (Test-Path "$($installer.FullName).sig")) { throw 'the update signature was not written' }
+    $version = (Get-Content 'tauri.conf.json' -Raw | ConvertFrom-Json).version
+    # GitHub turns a space in an attached file's name into a dot.
+    $published = $installer.Name -replace ' ', '.'
+    $feed = [ordered]@{
+        version  = $version
+        notes    = $tagNotes.Trim()
+        pub_date = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+        platforms = @{ 'windows-x86_64' = @{
+            signature = (Get-Content "$($installer.FullName).sig" -Raw).Trim()
+            url       = "https://github.com/jasonswrench-beep/prism_survey/releases/download/$tag/$published"
+        } }
+    }
+    $dir = Split-Path -Parent $installer.FullName
+    [System.IO.File]::WriteAllText((Join-Path $dir 'latest.json'), ($feed | ConvertTo-Json -Depth 6), (New-Object System.Text.UTF8Encoding $false))
+    # The outgoing release's feed becomes previous.json, which Return to the previous version reads.
+    $previous = Join-Path $dir 'previous.json'
+    Remove-Item $previous -ErrorAction SilentlyContinue
+    try {
+        $old = Invoke-RestMethod 'https://github.com/jasonswrench-beep/prism_survey/releases/latest/download/latest.json' -TimeoutSec 30
+        if ($old.version -and $old.version -ne $version) {
+            [System.IO.File]::WriteAllText($previous, ($old | ConvertTo-Json -Depth 6), (New-Object System.Text.UTF8Encoding $false))
+            "previous.json points at version $($old.version)."
+        }
+    } catch {
+        'No published latest.json yet, so no previous.json (normal for the first release with updates).'
+    }
+    "Wrote latest.json beside the installer: attach it (and previous.json, if written) to the release $tag with the installer."
+}
 "Built $($installer.FullName) from tag $tag"
 "SHA-256 $hash"

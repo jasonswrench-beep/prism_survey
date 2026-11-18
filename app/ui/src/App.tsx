@@ -3,7 +3,9 @@
 // confirm screen comes with journal article detection in phase 3.
 
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { call, errorText, pickFile, pickFolder, pickSave } from './bridge';
+import { call, errorText, inTauri, pickFile, pickFolder, pickSave } from './bridge';
+import { HelpView } from './HelpView';
+import { dailyCheckDue, readPrefs, writePrefs } from './updates';
 import type {
   AnchorSet,
   ChangeOutcome,
@@ -112,7 +114,10 @@ export function App() {
   const [study, setStudy] = useState<Study | null>(null);
   const [studyPath, setStudyPath] = useState<string | null>(null);
   const [studyDirty, setStudyDirty] = useState(false);
-  const [view, setView] = useState<'scale' | 'study' | 'directory' | 'variant'>('scale');
+  const [view, setView] = useState<'scale' | 'study' | 'directory' | 'variant' | 'help'>('scale');
+  const [helpPage, setHelpPage] = useState('getting-started');
+  /// A newer version found by the once-a-day check (off unless turned on in Help, Updates).
+  const [updateFound, setUpdateFound] = useState<string | null>(null);
   const [variantOf, setVariantOf] = useState<{ path: string; title: string } | null>(null);
   const [parentChanges, setParentChanges] = useState<{ parentPath: string | null; changes: ParentChange[] } | null>(null);
   const [directoryEntry, setDirectoryEntry] = useState<string | null>(null);
@@ -120,8 +125,14 @@ export function App() {
   const [editingPart, setEditingPart] = useState<number | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
 
-  const tab: 'scales' | 'questionnaire' | 'directory' = view === 'study' ? 'questionnaire' : view === 'directory' ? 'directory' : 'scales';
-  const goTab = (t: 'scales' | 'questionnaire' | 'directory') => setView(t === 'questionnaire' ? 'study' : t === 'directory' ? 'directory' : variantOf ? 'variant' : 'scale');
+  type Tab = 'scales' | 'questionnaire' | 'directory' | 'help';
+  const tab: Tab = view === 'study' ? 'questionnaire' : view === 'directory' ? 'directory' : view === 'help' ? 'help' : 'scales';
+  const goTab = (t: Tab) =>
+    setView(t === 'questionnaire' ? 'study' : t === 'directory' ? 'directory' : t === 'help' ? 'help' : variantOf ? 'variant' : 'scale');
+  const openHelp = (page?: string) => {
+    if (page) setHelpPage(page);
+    setView('help');
+  };
   const say = (text: string) => setStatus({ kind: 'info', text });
   const fail = (e: unknown) => setStatus({ kind: 'error', text: errorText(e) });
 
@@ -138,6 +149,27 @@ export function App() {
     call<Settings>('settings.get').then(setSettings).catch(fail);
     refreshLibrary();
   }, [refreshLibrary]);
+
+  // The once-a-day update check (Help, Updates): off unless turned on; it only announces a newer version.
+  useEffect(() => {
+    if (!inTauri) return;
+    const run = () => {
+      const p = readPrefs();
+      if (!dailyCheckDue(p.daily, p.lastCheck)) return;
+      call<{ available: boolean; version?: string }>('update.check')
+        .then((r) => {
+          writePrefs({ ...readPrefs(), lastCheck: new Date().toISOString() });
+          if (r.available && r.version) {
+            setUpdateFound(r.version);
+            setStatus({ kind: 'info', text: `Prism Survey ${r.version} is available: see Help, Updates.` });
+          }
+        })
+        .catch(() => {});
+    };
+    run();
+    const t = setInterval(run, 60 * 60 * 1000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     const filters: Record<string, unknown> = {};
@@ -536,7 +568,10 @@ export function App() {
   // Ctrl+S saves; F8 moves to the next field the importer was unsure of.
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
+      if (ev.key === 'F1') {
+        ev.preventDefault();
+        openHelp();
+      } else if ((ev.ctrlKey || ev.metaKey) && ev.key.toLowerCase() === 's') {
         ev.preventDefault();
         if (view === 'study') saveStudy(ev.shiftKey);
         else saveScale(ev.shiftKey);
@@ -573,6 +608,7 @@ export function App() {
             ['scales', 'Scales'],
             ['questionnaire', 'Questionnaire'],
             ['directory', 'Comm Directory'],
+            ['help', 'Help'],
           ] as const
         ).map(([key, label]) => (
           <button
@@ -583,9 +619,9 @@ export function App() {
             tabIndex={tab === key ? 0 : -1}
             onClick={() => goTab(key)}
             onKeyDown={(e) => {
-              const order = ['scales', 'questionnaire', 'directory'] as const;
+              const order = ['scales', 'questionnaire', 'directory', 'help'] as const;
               const k = order.indexOf(key);
-              const to = e.key === 'ArrowRight' ? order[(k + 1) % 3] : e.key === 'ArrowLeft' ? order[(k + 2) % 3] : null;
+              const to = e.key === 'ArrowRight' ? order[(k + 1) % 4] : e.key === 'ArrowLeft' ? order[(k + 3) % 4] : null;
               if (to) {
                 e.preventDefault();
                 goTab(to);
@@ -596,10 +632,25 @@ export function App() {
             {label}
             {key === 'questionnaire' && study && studyDirty && <span className="sr-only"> (not saved)</span>}
             {key === 'questionnaire' && study && studyDirty && <span className="tab-dot" aria-hidden="true" />}
+            {key === 'help' && updateFound && <span className="sr-only"> (version {updateFound} is available)</span>}
+            {key === 'help' && updateFound && <span className="tab-dot" aria-hidden="true" />}
           </button>
         ))}
       </div>
-      {tab === 'questionnaire' ? (
+      {tab === 'help' ? (
+        <header className="toolbar" role="toolbar" aria-label="Help commands">
+          <div className="group" role="group" aria-label="Help">
+            <button onClick={() => openHelp('getting-started')} aria-pressed={helpPage === 'getting-started'}>
+              <Icon name="ui-help" />
+              Getting started
+            </button>
+            <button onClick={() => openHelp('updates')} aria-pressed={helpPage === 'updates'}>
+              <Icon name="ui-refresh" />
+              Check for updates
+            </button>
+          </div>
+        </header>
+      ) : tab === 'questionnaire' ? (
         <header className="toolbar" role="toolbar" aria-label="Questionnaire commands">
           <div className="group" role="group" aria-label="Questionnaire">
             <button onClick={newStudy}>
@@ -703,8 +754,8 @@ export function App() {
       </header>
       )}
 
-      <div className={'body' + (tab === 'questionnaire' ? ' no-library' : '')} role="tabpanel" aria-labelledby={`tab-${tab}`}>
-        {tab !== 'questionnaire' && (
+      <div className={'body' + (tab === 'questionnaire' || tab === 'help' ? ' no-library' : '')} role="tabpanel" aria-labelledby={`tab-${tab}`}>
+        {tab !== 'questionnaire' && tab !== 'help' && (
         <nav className="library" aria-label="Scale library">
           <h2>Library</h2>
           <p className="folder" title={settings?.libraryFolder}>
@@ -808,8 +859,10 @@ export function App() {
         </nav>
         )}
 
-        <main className={'main' + (tab === 'questionnaire' ? ' qmain-area' : article && scale && !showCandidates ? ' with-article' : '')} ref={formRef}>
-          {view === 'variant' && variantOf ? (
+        <main className={'main' + (tab === 'questionnaire' || tab === 'help' ? ' qmain-area' : article && scale && !showCandidates ? ' with-article' : '')} ref={formRef}>
+          {view === 'help' ? (
+            <HelpView page={helpPage} setPage={setHelpPage} unsaved={dirty || (!!study && studyDirty)} />
+          ) : view === 'variant' && variantOf ? (
             <VariantView
               parentPath={variantOf.path}
               parentTitle={variantOf.title}

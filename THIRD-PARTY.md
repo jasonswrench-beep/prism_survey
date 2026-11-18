@@ -180,6 +180,7 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | alloc-no-stdlib | 3.0.0 | BSD-3-Clause |
 | alloc-stdlib | 0.3.0 | BSD-3-Clause |
 | anyhow | 1.0.104 | MIT OR Apache-2.0 |
+| atomic-waker | 1.1.2 | Apache-2.0 OR MIT |
 | base64 | 0.23.1 | MIT OR Apache-2.0 |
 | bit-set | 0.8.0 | Apache-2.0 OR MIT |
 | bit-vec | 0.8.0 | Apache-2.0 OR MIT |
@@ -221,13 +222,25 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | erased-serde | 0.4.11 | MIT OR Apache-2.0 |
 | find-msvc-tools | 0.1.15 | MIT OR Apache-2.0 |
 | form_urlencoded | 1.2.2 | MIT OR Apache-2.0 |
+| futures-channel | 0.3.34 | MIT OR Apache-2.0 |
+| futures-core | 0.3.34 | MIT OR Apache-2.0 |
+| futures-macro | 0.3.34 | MIT OR Apache-2.0 |
+| futures-sink | 0.3.34 | MIT OR Apache-2.0 |
+| futures-task | 0.3.34 | MIT OR Apache-2.0 |
+| futures-util | 0.3.34 | MIT OR Apache-2.0 |
 | getrandom | 0.3.4 | MIT OR Apache-2.0 |
 | glob | 0.3.4 | MIT OR Apache-2.0 |
 | hashbrown | 0.12.3 | MIT OR Apache-2.0 |
 | heck | 0.5.0 | MIT OR Apache-2.0 |
 | html5ever | 0.39.0 | MIT OR Apache-2.0 |
 | http | 1.5.0 | MIT OR Apache-2.0 |
+| http-body | 1.1.0 | MIT |
+| http-body-util | 0.1.5 | MIT |
+| httparse | 1.10.1 | MIT OR Apache-2.0 |
 | hybrid-array | 0.4.15 | MIT OR Apache-2.0 |
+| hyper | 1.12.0 | MIT |
+| hyper-tls | 0.6.0 | MIT/Apache-2.0 |
+| hyper-util | 0.1.21 | MIT |
 | ico | 0.6.0 | MIT |
 | icu_collections | 2.4.0 | Unicode-3.0 |
 | icu_locale_core | 2.4.0 | Unicode-3.0 |
@@ -241,6 +254,7 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | idna_adapter | 1.2.2 | Apache-2.0 OR MIT |
 | indexmap | 1.9.3 | Apache-2.0 OR MIT |
 | infer | 0.22.0 | MIT |
+| ipnet | 2.12.2 | MIT OR Apache-2.0 |
 | json-patch | 4.2.0 | MIT/Apache-2.0 |
 | jsonptr | 0.7.1 | MIT OR Apache-2.0 |
 | keyboard-types | 0.8.3 | MIT OR Apache-2.0 |
@@ -249,7 +263,10 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | lock_api | 0.4.14 | MIT OR Apache-2.0 |
 | markup5ever | 0.39.0 | MIT OR Apache-2.0 |
 | mime | 0.3.18 | MIT OR Apache-2.0 |
+| minisign-verify | 0.3.0 | MIT |
+| mio | 1.2.5 | MIT |
 | muda | 0.20.0 | Apache-2.0 OR MIT |
+| native-tls | 0.2.18 | MIT OR Apache-2.0 |
 | new_debug_unreachable | 1.0.6 | MIT |
 | num-conv | 0.2.2 | MIT OR Apache-2.0 |
 | option-ext | 0.2.0 | MPL-2.0 |
@@ -264,9 +281,12 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | precomputed-hash | 0.1.1 | MIT |
 | quick-xml | 0.42.0 | MIT |
 | raw-window-handle | 0.6.2 | MIT OR Apache-2.0 OR Zlib |
+| reqwest | 0.13.5 | MIT OR Apache-2.0 |
 | rfd | 0.17.2 | MIT |
 | rustc_version | 0.4.1 | MIT OR Apache-2.0 |
+| rustls-pki-types | 1.16.0 | MIT OR Apache-2.0 |
 | same-file | 1.0.6 | Unlicense/MIT |
+| schannel | 0.1.30 | MIT |
 | schemars | 0.8.22 | MIT |
 | schemars_derive | 0.8.22 | MIT |
 | selectors | 0.38.0 | MPL-2.0 |
@@ -282,11 +302,14 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | servo_arc | 0.4.3 | MIT OR Apache-2.0 |
 | sha2 | 0.11.1 | MIT OR Apache-2.0 |
 | shlex | 2.0.1 | MIT OR Apache-2.0 |
+| slab | 0.4.12 | MIT |
+| socket2 | 0.6.5 | MIT OR Apache-2.0 |
 | softbuffer | 0.4.8 | MIT OR Apache-2.0 |
 | static_vcruntime | 3.0.0 | MIT OR Apache-2.0 OR Zlib |
 | string_cache | 0.9.0 | MIT OR Apache-2.0 |
 | string_cache_codegen | 0.6.1 | MIT OR Apache-2.0 |
 | strsim | 0.11.1 | MIT |
+| sync_wrapper | 1.0.2 | Apache-2.0 |
 | tao | 0.37.2 | Apache-2.0 |
 | tauri | 2.12.6 | Apache-2.0 OR MIT |
 | tauri-build | 2.7.5 | Apache-2.0 OR MIT |
@@ -295,22 +318,31 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | tauri-plugin | 2.7.3 | Apache-2.0 OR MIT |
 | tauri-plugin-dialog | 2.8.4 | Apache-2.0 OR MIT |
 | tauri-plugin-fs | 2.7.1 | Apache-2.0 OR MIT |
+| tauri-plugin-updater | 2.14.1 | Apache-2.0 OR MIT |
 | tauri-runtime | 2.12.3 | Apache-2.0 OR MIT |
 | tauri-runtime-wry | 2.12.4 | Apache-2.0 OR MIT |
 | tauri-utils | 2.10.3 | Apache-2.0 OR MIT |
 | tauri-winres | 0.3.7 | MIT |
+| tempfile | 3.27.0 | MIT OR Apache-2.0 |
 | tendril | 0.5.1 | MIT OR Apache-2.0 |
 | time | 0.3.55 | MIT OR Apache-2.0 |
 | time-core | 0.1.9 | MIT OR Apache-2.0 |
 | time-macros | 0.2.32 | MIT OR Apache-2.0 |
 | tinystr | 0.8.5 | Unicode-3.0 |
 | tokio | 1.54.1 | MIT |
+| tokio-native-tls | 0.3.1 | MIT |
+| tokio-util | 0.7.20 | MIT |
 | toml | 1.2.1+spec-1.1.0 | MIT OR Apache-2.0 |
 | toml_datetime | 1.1.3+spec-1.1.0 | MIT OR Apache-2.0 |
 | toml_parser | 1.1.5+spec-1.1.0 | MIT OR Apache-2.0 |
 | toml_writer | 1.2.0+spec-1.1.0 | MIT OR Apache-2.0 |
+| tower | 0.5.3 | MIT |
+| tower-http | 0.6.11 | MIT |
+| tower-layer | 0.3.3 | MIT |
+| tower-service | 0.3.3 | MIT |
 | tracing | 0.1.44 | MIT |
 | tracing-core | 0.1.36 | MIT |
+| try-lock | 0.2.5 | MIT |
 | typeid | 1.0.3 | MIT OR Apache-2.0 |
 | unicode-segmentation | 1.13.3 | MIT OR Apache-2.0 |
 | url | 2.5.8 | MIT OR Apache-2.0 |
@@ -320,12 +352,14 @@ Text recognition uses the recogniser built into Windows (Windows.Media.Ocr), cal
 | vswhom | 0.1.0 | MIT |
 | vswhom-sys | 0.1.3 | MIT |
 | walkdir | 2.5.0 | Unlicense/MIT |
+| want | 0.3.2 | MIT |
 | web_atoms | 0.2.6 | MIT OR Apache-2.0 |
 | webview2-com | 0.39.1 | MIT |
 | webview2-com-macros | 0.8.1 | MIT |
 | webview2-com-sys | 0.39.1 | MIT |
 | winapi-util | 0.1.11 | Unlicense OR MIT |
 | window-vibrancy | 0.8.1 | Apache-2.0 OR MIT |
+| windows-registry | 0.6.1 | MIT OR Apache-2.0 |
 | windows-version | 0.1.7 | MIT OR Apache-2.0 |
 | winnow | 1.0.5 | MIT |
 | winreg | 0.56.0 | MIT |

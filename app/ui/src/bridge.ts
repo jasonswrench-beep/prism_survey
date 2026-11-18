@@ -10,7 +10,7 @@ export interface ApiError {
   message: string;
 }
 
-const inTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
+export const inTauri = typeof window !== 'undefined' && '__TAURI_INTERNALS__' in window;
 
 export async function call<T>(cmd: string, args?: Record<string, unknown>): Promise<T> {
   if (inTauri) return invoke<T>('call', { cmd, args: args ?? null });
