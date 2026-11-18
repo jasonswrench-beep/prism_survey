@@ -8,6 +8,7 @@
 //! sources in APA 7 and any self-check findings still open).
 
 use super::{package, scale_body, Copy, ExportOptions, Exported, P};
+use prismsurvey_core::cover_letter::heading;
 use prismsurvey_core::demographics::is_choice_line;
 use prismsurvey_core::study::{Part, Study, TitleMode};
 use prismsurvey_core::{LicenceStatus, SourcePlacement};
@@ -88,6 +89,19 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
                     body.push_str(&P::new("PSTransition").text(text.trim()).xml());
                 }
             }
+            Part::CoverLetter { title, text } => {
+                if !title.trim().is_empty() {
+                    body.push_str(&P::new("Heading1").text(title.trim()).keep_next().xml());
+                }
+                for line in text.lines().filter(|l| !l.trim().is_empty()) {
+                    match heading(line) {
+                        Some(h) => {
+                            body.push_str(&P::new("PSCoverHeading").text(h).keep_next().xml())
+                        }
+                        None => body.push_str(&P::new("PSCoverLetter").text(line.trim()).xml()),
+                    }
+                }
+            }
             Part::Demographics { title, text } => {
                 if !title.trim().is_empty() {
                     body.push_str(&P::new("Heading1").text(title.trim()).keep_next().xml());
@@ -156,6 +170,13 @@ mod tests {
             scale: b,
             library_path: None,
         });
+        st.parts.insert(
+            0,
+            Part::CoverLetter {
+                title: "About this survey".into(),
+                text: "## Key information\nYou are invited to take part.".into(),
+            },
+        );
         st.parts.push(Part::Demographics {
             title: "About you".into(),
             text: "What is your age? ______\nWhat is your major? ______\nDo you supervise other employees?\n☐ Yes\n☐ No".into(),
@@ -183,6 +204,11 @@ mod tests {
         assert!(p.contains(&"The next questions ask about gardens.".to_string()));
         assert!(p.contains(&"What is your major? ______".to_string()));
         assert!(p.contains(&"☐ Yes".to_string()), "{p:?}");
+        assert!(
+            p.contains(&"Key information".to_string()) && !p.iter().any(|x| x.starts_with("## ")),
+            "{p:?}"
+        );
+        assert!(p.contains(&"You are invited to take part.".to_string()));
     }
 
     #[test]

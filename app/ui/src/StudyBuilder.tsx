@@ -20,7 +20,8 @@ export type Part =
   | { kind: 'scale'; scale: Scale; libraryPath?: string }
   | { kind: 'pageBreak' }
   | { kind: 'transition'; text: string }
-  | { kind: 'demographics'; title: string; text: string };
+  | { kind: 'demographics'; title: string; text: string }
+  | { kind: 'coverLetter'; title: string; text: string };
 
 export interface Study {
   pstudyVersion: number;
@@ -49,7 +50,28 @@ function partLabel(p: Part): string {
       return 'Transition sentence';
     case 'demographics':
       return 'Demographic questions';
+    case 'coverLetter':
+      return 'Cover letter';
   }
+}
+
+/// The bracketed parts of a cover letter still to fill in or choose, from the engine (coverLetter.placeholders).
+function StillToFill({ text }: { text: string }) {
+  const [left, setLeft] = useState<string[]>([]);
+  useEffect(() => {
+    const t = setTimeout(() => {
+      call<string[]>('coverLetter.placeholders', { text })
+        .then(setLeft)
+        .catch(() => setLeft([]));
+    }, 250);
+    return () => clearTimeout(t);
+  }, [text]);
+  if (!left.length) return <p className="hint">Every bracketed part is filled in.</p>;
+  return (
+    <div className="finding">
+      <strong>Still to fill in or choose ({left.length}):</strong> {left.map((x) => (x.length > 60 ? `${x.slice(0, 57)}…]` : x)).join('; ')}
+    </div>
+  );
 }
 
 interface Recommendation {
@@ -116,6 +138,18 @@ export function StudyBuilder({
     set({ parts });
   };
   const add = (p: Part) => set({ parts: [...study.parts, p] });
+  /// A cover letter goes first; the study's title and estimated minutes go in where the template asks for them.
+  async function addCoverLetter(which: 'short' | 'long') {
+    try {
+      const t = await call<{ title: string; text: string }>('coverLetter.template', { length: which });
+      let text = t.text;
+      if (study.title.trim() && study.title.trim() !== 'New study') text = text.split('[STUDY TITLE]').join(study.title.trim());
+      if (length && length.minutes > 0) text = text.split('[MINUTES]').join(String(length.minutes));
+      set({ parts: [{ kind: 'coverLetter', title: t.title, text }, ...study.parts] });
+    } catch (e) {
+      fail(e);
+    }
+  }
   let scaleNumber = 0;
 
   return (
@@ -193,6 +227,27 @@ export function StudyBuilder({
                     <input value={p.text} placeholder="The next questions ask about…" onChange={(e) => setPart(i, { ...p, text: e.target.value })} />
                   </label>
                 )}
+                {p.kind === 'coverLetter' && (
+                  <>
+                    <label className="field">
+                      <span className="field-label">Heading</span>
+                      <input value={p.title} onChange={(e) => setPart(i, { ...p, title: e.target.value })} />
+                    </label>
+                    <label className="field">
+                      <span className="field-label">The letter, one paragraph per line</span>
+                      <textarea
+                        rows={Math.min(24, Math.max(8, p.text.split('\n').length + 2))}
+                        value={p.text}
+                        onChange={(e) => setPart(i, { ...p, text: e.target.value })}
+                      />
+                      <span className="hint">
+                        A line starting with ## prints as a heading. The template covers the consent elements of 45 CFR 46.116 that apply to a survey; your IRB's own
+                        template and wording come first.
+                      </span>
+                    </label>
+                    <StillToFill text={p.text} />
+                  </>
+                )}
                 {p.kind === 'demographics' && (
                   <>
                     <label className="field">
@@ -256,6 +311,12 @@ export function StudyBuilder({
           >
             <Icon name="cmd-import" size={16} />
             Import a stored scale or questionnaire…
+          </button>
+          <button className="small" onClick={() => addCoverLetter('short')}>
+            Add a short cover letter
+          </button>
+          <button className="small" onClick={() => addCoverLetter('long')}>
+            Add a long cover letter
           </button>
           <button className="small" onClick={() => add({ kind: 'pageBreak' })}>
             <Icon name="study-page-break" size={16} />

@@ -13,6 +13,8 @@
 //!   scale.setLabels { scale, labels }            -> { scale, outcome }
 //!   anchors.common                               -> [[label; 5]]
 //!   demographics.bank                            -> [BankQuestion with its text]
+//!   coverLetter.template { length }              -> { title, text } (length: short or long)
+//!   coverLetter.placeholders { text }            -> [the bracketed parts still to fill in]
 //!   scale.editInstructions { scale, text }       -> Scale
 //!   scale.useHouseInstructions { scale, stem? }  -> Scale
 //!   scale.parseSelector { text }                 -> ItemSelector
@@ -465,6 +467,24 @@ impl Api {
                 with_outcome(s, out)
             }
             "anchors.common" => to_value(COMMON_ANCHORS),
+            "coverLetter.template" => {
+                use prismsurvey_core::cover_letter::{default_title, template, Length};
+                let length: Length = match arg::<String>(&args, "length")?.as_str() {
+                    "short" => Length::Short,
+                    "long" => Length::Long,
+                    other => {
+                        return Err(ApiError::new(
+                            "bad_argument",
+                            format!("length: {other} is not short or long"),
+                        ))
+                    }
+                };
+                Ok(json!({ "title": default_title(length), "text": template(length) }))
+            }
+            "coverLetter.placeholders" => {
+                let text: String = arg(&args, "text")?;
+                to_value(prismsurvey_core::cover_letter::placeholders(&text))
+            }
             "demographics.bank" => Ok(Value::Array(
                 prismsurvey_core::demographics::BANK
                     .iter()
@@ -1153,6 +1173,23 @@ mod tests {
     fn api() -> (Api, tempfile::TempDir) {
         let dir = tempfile::tempdir().unwrap();
         (Api::new(&dir.path().join("config"), dir.path()), dir)
+    }
+
+    #[test]
+    fn a_cover_letter_template_comes_with_what_is_left_to_fill_in() {
+        let (mut api, _dir) = api();
+        let long = api
+            .call("coverLetter.template", json!({ "length": "long" }))
+            .unwrap();
+        let text = long["text"].as_str().unwrap();
+        assert!(text.starts_with("## Key information"));
+        let left = api
+            .call("coverLetter.placeholders", json!({ "text": text }))
+            .unwrap();
+        assert!(left.as_array().unwrap().iter().any(|p| p == "[IRB NAME]"));
+        assert!(api
+            .call("coverLetter.template", json!({ "length": "medium" }))
+            .is_err());
     }
 
     #[test]

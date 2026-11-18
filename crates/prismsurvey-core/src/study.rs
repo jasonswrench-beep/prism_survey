@@ -82,6 +82,12 @@ pub enum Part {
         title: String,
         text: String,
     },
+    /// The letter respondents read before the questions (cover_letter.rs): one paragraph per line, a line starting
+    /// with "## " is a heading.
+    CoverLetter {
+        title: String,
+        text: String,
+    },
 }
 
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
