@@ -8,6 +8,14 @@ import type { Scale } from './types';
 import { FORMAT_LABEL } from './types';
 import { Icon } from './Icon';
 
+/// A ready-made demographic question (demographics.bank): `text` is what it adds to the block.
+interface BankQuestion {
+  id: string;
+  group: string;
+  label: string;
+  text: string;
+}
+
 export type Part =
   | { kind: 'scale'; scale: Scale; libraryPath?: string }
   | { kind: 'pageBreak' }
@@ -75,6 +83,13 @@ export function StudyBuilder({
   const [dragFrom, setDragFrom] = useState<number | null>(null);
   const [maxMinutes, setMaxMinutes] = useState(20);
   const [recs, setRecs] = useState<Recommendation[] | null>(null);
+  const [bank, setBank] = useState<BankQuestion[]>([]);
+
+  useEffect(() => {
+    call<BankQuestion[]>('demographics.bank')
+      .then(setBank)
+      .catch(() => setBank([]));
+  }, []);
 
   async function suggest() {
     try {
@@ -186,8 +201,38 @@ export function StudyBuilder({
                     </label>
                     <label className="field">
                       <span className="field-label">Questions, one per line</span>
-                      <textarea rows={5} value={p.text} onChange={(e) => setPart(i, { ...p, text: e.target.value })} />
+                      <textarea
+                        rows={Math.min(16, Math.max(5, p.text.split('\n').length + 1))}
+                        value={p.text}
+                        onChange={(e) => setPart(i, { ...p, text: e.target.value })}
+                      />
+                      <span className="hint">A line starting with ☐ prints as an answer choice under the question above it.</span>
                     </label>
+                    {bank.length > 0 && (
+                      <label className="field">
+                        <span className="field-label">Add a ready-made question</span>
+                        <select
+                          value=""
+                          onChange={(e) => {
+                            const q = bank.find((x) => x.id === e.target.value);
+                            if (q) setPart(i, { ...p, text: p.text.trim() ? `${p.text.trimEnd()}\n${q.text}` : q.text });
+                          }}
+                        >
+                          <option value="">Choose a question…</option>
+                          {[...new Set(bank.map((q) => q.group))].map((g) => (
+                            <optgroup key={g} label={g}>
+                              {bank
+                                .filter((q) => q.group === g)
+                                .map((q) => (
+                                  <option key={q.id} value={q.id}>
+                                    {q.label}
+                                  </option>
+                                ))}
+                            </optgroup>
+                          ))}
+                        </select>
+                      </label>
+                    )}
                   </>
                 )}
                 {p.kind === 'scale' && p.libraryPath && <span className="reason">From the library: {p.libraryPath}</span>}

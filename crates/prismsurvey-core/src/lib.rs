@@ -1,6 +1,7 @@
 //! Prism Survey's core: the scale record, its `.pscale` file, the response scale settings of the three formats, and the
 //! house instructions that follow a scale's format and point count.
 
+pub mod demographics;
 pub mod directory;
 pub mod formats;
 pub mod instructions;

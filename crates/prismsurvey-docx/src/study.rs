@@ -8,6 +8,7 @@
 //! sources in APA 7 and any self-check findings still open).
 
 use super::{package, scale_body, Copy, ExportOptions, Exported, P};
+use prismsurvey_core::demographics::is_choice_line;
 use prismsurvey_core::study::{Part, Study, TitleMode};
 use prismsurvey_core::{LicenceStatus, SourcePlacement};
 
@@ -91,8 +92,20 @@ pub fn export_study(study: &Study, copy: Copy) -> Exported {
                 if !title.trim().is_empty() {
                     body.push_str(&P::new("Heading1").text(title.trim()).keep_next().xml());
                 }
-                for line in text.lines().filter(|l| !l.trim().is_empty()) {
-                    body.push_str(&P::new("PSDemographic").text(line.trim_end()).xml());
+                // A question keeps its answer choices (lines starting with a tick box) on its page.
+                let lines: Vec<&str> = text.lines().filter(|l| !l.trim().is_empty()).collect();
+                for (i, line) in lines.iter().enumerate() {
+                    let choice = is_choice_line(line);
+                    let style = if choice {
+                        "PSDemographicChoice"
+                    } else {
+                        "PSDemographic"
+                    };
+                    let mut p = P::new(style).text(line.trim());
+                    if lines.get(i + 1).is_some_and(|n| is_choice_line(n)) {
+                        p = p.keep_next();
+                    }
+                    body.push_str(&p.xml());
                 }
             }
         }
@@ -145,7 +158,7 @@ mod tests {
         });
         st.parts.push(Part::Demographics {
             title: "About you".into(),
-            text: "What is your age? ______\nWhat is your major? ______".into(),
+            text: "What is your age? ______\nWhat is your major? ______\nDo you supervise other employees?\n☐ Yes\n☐ No".into(),
         });
         st
     }
@@ -169,6 +182,7 @@ mod tests {
         );
         assert!(p.contains(&"The next questions ask about gardens.".to_string()));
         assert!(p.contains(&"What is your major? ______".to_string()));
+        assert!(p.contains(&"☐ Yes".to_string()), "{p:?}");
     }
 
     #[test]

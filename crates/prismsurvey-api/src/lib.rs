@@ -12,6 +12,7 @@
 //!   scale.setAnchors { scale, anchorSet, labelMode } -> { scale, outcome }
 //!   scale.setLabels { scale, labels }            -> { scale, outcome }
 //!   anchors.common                               -> [[label; 5]]
+//!   demographics.bank                            -> [BankQuestion with its text]
 //!   scale.editInstructions { scale, text }       -> Scale
 //!   scale.useHouseInstructions { scale, stem? }  -> Scale
 //!   scale.parseSelector { text }                 -> ItemSelector
@@ -464,6 +465,16 @@ impl Api {
                 with_outcome(s, out)
             }
             "anchors.common" => to_value(COMMON_ANCHORS),
+            "demographics.bank" => Ok(Value::Array(
+                prismsurvey_core::demographics::BANK
+                    .iter()
+                    .map(|q| {
+                        let mut v = to_value(q)?;
+                        v["text"] = Value::String(q.text());
+                        Ok(v)
+                    })
+                    .collect::<Result<Vec<_>, ApiError>>()?,
+            )),
             "scale.editInstructions" => {
                 let mut s: Scale = arg(&args, "scale")?;
                 let text: String = arg(&args, "text")?;
@@ -1142,6 +1153,23 @@ mod tests {
     fn api() -> (Api, tempfile::TempDir) {
         let dir = tempfile::tempdir().unwrap();
         (Api::new(&dir.path().join("config"), dir.path()), dir)
+    }
+
+    #[test]
+    fn the_demographic_bank_comes_with_the_text_each_question_adds() {
+        let (mut api, _dir) = api();
+        let bank = api.call("demographics.bank", Value::Null).unwrap();
+        let gender = bank
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|q| q["id"] == "gender")
+            .unwrap();
+        assert_eq!(gender["group"], "About you");
+        assert!(gender["text"]
+            .as_str()
+            .unwrap()
+            .starts_with("What is your gender?\n☐ Woman"));
     }
 
     #[test]
