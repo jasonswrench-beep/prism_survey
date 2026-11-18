@@ -1,7 +1,7 @@
 import { resolve } from 'node:path';
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
-import { ICON_ROOT, writeIcons } from './scripts/build-icons';
+import { ICON_ROOT, writeIcons } from './scripts/build-icons.ts';
 
 // Writes src/assets/icons.generated.ts from assets/icons when a build starts, and again while the dev server runs
 // whenever an icon file is added, changed or removed, so a newly drawn icon shows with no code change.
