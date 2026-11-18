@@ -33,6 +33,14 @@ import { ArticlePane, fieldId, type ArticlePage } from './ArticlePane';
 import { StudyBuilder, type Study } from './StudyBuilder';
 import { DirectoryView, type Entry } from './DirectoryView';
 import { VariantPanel, VariantView } from './VariantView';
+import { Icon, type IconName } from './Icon';
+
+/// The icon beside each format, on the New buttons and in the library list (icon brief, "The three formats").
+const FORMAT_ICON: Record<Format, IconName> = {
+  likertBlankLine: 'fmt-blank-line',
+  likertBoxGrid: 'fmt-box-grid',
+  semanticDifferential: 'fmt-semantic',
+};
 
 type Status = { kind: 'info' | 'error'; text: string } | null;
 
@@ -533,60 +541,108 @@ export function App() {
 
   return (
     <div className="app">
-      <header className="toolbar" role="toolbar" aria-label="Scale commands">
+      <div className="titlebar">
         <span className="brand">
-          <img src={icon} alt="" width={22} height={22} />
+          <img src={icon} alt="" width={24} height={24} />
           Prism Survey
         </span>
+      </div>
+      <header className="toolbar" role="toolbar" aria-label="Scale commands">
         <div className="group" role="group" aria-label="New scale">
           <span className="group-label">New</span>
-          <button onClick={() => newScale('likertBlankLine')}>Likert blank-line</button>
-          <button onClick={() => newScale('likertBoxGrid')}>Likert box grid</button>
-          <button onClick={() => newScale('semanticDifferential')}>Semantic differential</button>
+          <button onClick={() => newScale('likertBlankLine')}>
+            <Icon name="fmt-blank-line" />
+            Likert blank-line
+          </button>
+          <button onClick={() => newScale('likertBoxGrid')}>
+            <Icon name="fmt-box-grid" />
+            Likert box grid
+          </button>
+          <button onClick={() => newScale('semanticDifferential')}>
+            <Icon name="fmt-semantic" />
+            Semantic differential
+          </button>
         </div>
         <div className="group" role="group" aria-label="Files">
-          <button onClick={() => findInArticle()}>Find in an article…</button>
-          <button onClick={() => importFile()}>Import stored scale…</button>
+          <button onClick={() => findInArticle()}>
+            <Icon name="cmd-find-article" />
+            Find in an article…
+          </button>
+          <button onClick={() => importFile()}>
+            <Icon name="cmd-import" />
+            Import stored scale…
+          </button>
           <button onClick={() => setView('directory')} aria-pressed={view === 'directory'}>
+            <Icon name="view-directory" />
             Comm Directory
           </button>
-          <button onClick={() => openFile()}>Open…</button>
-          <button onClick={() => saveScale(false)} disabled={!scale}>
+          <button onClick={() => openFile()}>
+            <Icon name="cmd-open" />
+            Open…
+          </button>
+          <button className="primary" onClick={() => saveScale(false)} disabled={!scale}>
+            <Icon name="ui-save" />
             {path ? 'Save' : 'Confirm and save…'}
           </button>
           <button onClick={() => saveScale(true)} disabled={!scale}>
+            <Icon name="cmd-save-as" />
             Save as…
           </button>
           <button onClick={changeContext} disabled={!scale || !path} title="Make a linked variant of this scale for a new target, with its structure locked">
+            <Icon name="cmd-variant" />
             Change the context…
           </button>
         </div>
         <div className="group" role="group" aria-label="Word export">
           <button onClick={() => exportWord('respondent')} disabled={!scale}>
+            <Icon name="exp-respondent" />
             Export respondent copy…
           </button>
           <button onClick={() => exportWord('researcher')} disabled={!scale}>
+            <Icon name="exp-researcher" />
             Export researcher copy…
           </button>
           <button onClick={copyForWord} disabled={!scale}>
+            <Icon name="ui-copy" />
             Copy for Word
           </button>
         </div>
         <div className="group" role="group" aria-label="Study">
           <span className="group-label">Study</span>
-          <button onClick={newStudy}>New</button>
-          <button onClick={openStudy}>Open…</button>
-          {study && view === 'scale' && <button onClick={backToStudy}>{editingPart !== null ? 'Back to the study' : 'Show the study'}</button>}
+          <button onClick={newStudy}>
+            <Icon name="study-new" />
+            New
+          </button>
+          <button onClick={openStudy}>
+            <Icon name="cmd-open" />
+            Open…
+          </button>
+          {study && view === 'scale' && (
+            <button onClick={backToStudy}>
+              <Icon name="view-study" />
+              {editingPart !== null ? 'Back to the study' : 'Show the study'}
+            </button>
+          )}
           {study && view === 'study' && (
             <>
-              <button onClick={() => saveStudy(false)}>{studyPath ? 'Save' : 'Save…'}</button>
-              <button onClick={() => exportStudy('respondent')}>Export respondent copy…</button>
-              <button onClick={() => exportStudy('researcher')}>Export researcher copy…</button>
+              <button className="primary" onClick={() => saveStudy(false)}>
+                <Icon name="ui-save" />
+                {studyPath ? 'Save' : 'Save…'}
+              </button>
+              <button onClick={() => exportStudy('respondent')}>
+                <Icon name="exp-respondent" />
+                Export respondent copy…
+              </button>
+              <button onClick={() => exportStudy('researcher')}>
+                <Icon name="exp-researcher" />
+                Export researcher copy…
+              </button>
             </>
           )}
         </div>
-        <label className="check toolbar-check" title="Confirmed articles are saved as answer keys for the accuracy benchmark">
+        <label className="switch toolbar-check" title="Confirmed articles are saved as answer keys for the accuracy benchmark">
           <input type="checkbox" checked={benchmark} onChange={(e) => setBenchmark(e.target.checked)} />
+          <Icon name="cmd-benchmark" />
           Benchmark mode
         </label>
       </header>
@@ -598,10 +654,14 @@ export function App() {
             {settings?.libraryFolder}
           </p>
           <button className="small" onClick={changeLibraryFolder}>
+            <Icon name="src-folder" size={16} />
             Change folder…
           </button>
           <label className="field search-field">
-            <span className="field-label">Search</span>
+            <span className="field-label">
+              <Icon name="cmd-search" size={14} />
+              Search
+            </span>
             <input
               type="search"
               value={query}
@@ -612,7 +672,10 @@ export function App() {
           </label>
           <div className="filters">
             <label className="field">
-              <span className="field-label">Tag</span>
+              <span className="field-label">
+                <Icon name="ui-filter" size={14} />
+                Tag
+              </span>
               <select value={tagFilter} onChange={(e) => setTagFilter(e.target.value)}>
                 <option value="">Any</option>
                 {libraryTags.map((t) => (
@@ -647,6 +710,7 @@ export function App() {
           </div>
           {tagFilter && (
             <button className="small" onClick={renameTag}>
+              <Icon name="tag-rename" size={16} />
               Rename or merge this tag…
             </button>
           )}
@@ -661,14 +725,22 @@ export function App() {
                 .map(({ h, ...e }) => (
                 <li key={e.path}>
                   <button className={'lib-entry' + (e.path === path ? ' current' : '')} onClick={() => openFile(e.path)} disabled={!!e.error}>
-                    <span className="lib-title">{e.title || '(untitled)'}</span>
+                    <span className="lib-title">
+                      {!e.error && <Icon name={FORMAT_ICON[e.format]} size={16} />}
+                      {e.title || '(untitled)'}
+                    </span>
                     <span className="lib-meta">{e.error ? 'Cannot be opened' : `${FORMAT_LABEL[e.format]}, ${e.items} items`}</span>
-                    {e.variantChain && e.variantChain.length > 0 && <span className="lib-chain">Variant of {e.variantChain.join(', itself a variant of ')}</span>}
+                    {e.variantChain && e.variantChain.length > 0 && (
+                      <span className="lib-chain">
+                        <Icon name="lib-variant" size={14} /> Variant of {e.variantChain.join(', itself a variant of ')}
+                      </span>
+                    )}
                     {e.tags.length > 0 && <span className="lib-tags">{e.tags.join(' · ')}</span>}
                     {h && h.snippet && query.trim() && h.field !== 'title' && <span className="lib-snippet">{h.snippet}</span>}
                   </button>
                   {study && !e.error && (
                     <button className="small lib-add" onClick={() => addLibraryScale(e.path)} aria-label={`Add ${e.title} to the study`}>
+                      <Icon name="study-add" size={16} />
                       Add to study
                     </button>
                   )}
@@ -746,6 +818,11 @@ export function App() {
       </div>
 
       <footer className={'status' + (status?.kind === 'error' ? ' error' : '')} role="status" aria-live="polite">
+        {status?.kind === 'error' ? (
+          <Icon name="st-error" size={16} />
+        ) : (
+          !status && (view === 'study' && study ? !studyDirty : !!scale && !dirty) && <Icon name="st-saved" size={16} />
+        )}
         {status?.text ??
           (view === 'study' && study ? (studyDirty ? 'The study is not saved.' : 'The study is saved.') : scale ? (dirty ? 'Not saved.' : 'Saved.') : 'Ready.')}
       </footer>
@@ -819,6 +896,7 @@ function CandidateChooser({ article, onPick, onCancel }: { article: OpenArticle;
         {d.candidates.map((c, i) => (
           <li key={i}>
             <button onClick={() => onPick(i)}>
+              <Icon name={c.sampleOnly ? 'art-incomplete' : 'art-candidate'} />
               <strong>{d.scales[i].title}</strong>, page {c.page}, {d.scales[i].items.length} items{c.sampleOnly ? ' (sample items only)' : ''}
             </button>
             <span className="reason">Why: {c.reasons.join('; ')}.</span>
@@ -826,7 +904,10 @@ function CandidateChooser({ article, onPick, onCancel }: { article: OpenArticle;
         ))}
       </ol>
       <div className="buttons">
-        <button onClick={() => onPick(null)}>Open the article and outline the items myself</button>
+        <button onClick={() => onPick(null)}>
+          <Icon name="art-outline" />
+          Open the article and outline the items myself
+        </button>
         <button onClick={onCancel}>Cancel</button>
       </div>
     </section>
@@ -836,7 +917,10 @@ function CandidateChooser({ article, onPick, onCancel }: { article: OpenArticle;
 function Welcome() {
   return (
     <section className="welcome">
-      <h1>Prepare a scale</h1>
+      <div className="hero">
+        <img src={icon} alt="" width={64} height={64} />
+        <h1>Prepare a scale</h1>
+      </div>
       <p>Start a new scale from one of the three blank formats, or import a stored scale (.doc, .docx or .txt).</p>
       <p>
         Every field opens on one form to confirm and correct before anything is saved. Nothing leaves this computer: scales are kept as
@@ -856,6 +940,7 @@ function ScaleChooser({ choices, onPick, onCancel }: { choices: ImportReport[]; 
         {choices.map((r) => (
           <li key={r.part}>
             <button onClick={() => onPick(r)}>
+              <Icon name={FORMAT_ICON[r.scale.format]} />
               Scale {r.part}: {r.scale.title || '(no title)'}, {FORMAT_LABEL[r.scale.format]}, {r.scale.items.length} items
             </button>
           </li>
@@ -889,7 +974,7 @@ function TagEditor({ tags, known, onChange }: { tags: string[]; known: string[];
           <span className="tag" key={t}>
             {t}
             <button className="tag-remove" aria-label={`Remove the tag ${t}`} onClick={() => onChange(tags.filter((x) => x !== t))}>
-              ×
+              <Icon name="ui-close" size={14} />
             </button>
           </span>
         ))}
@@ -990,6 +1075,7 @@ function SelfCheck({ scale, findings, notes, edit, fail }: { scale: Scale; findi
   return (
     <section className="panel" aria-labelledby="check-h">
       <h2 id="check-h">
+        <Icon name="chk-selfcheck" />
         Self-check{' '}
         <span className="muted">
           ({open.length} open{decided.length ? `, ${decided.length} decided` : ''}
@@ -1000,21 +1086,28 @@ function SelfCheck({ scale, findings, notes, edit, fail }: { scale: Scale; findi
       <ul className="findings">
         {open.map((f) => (
           <li key={f.key} className={'finding-row ' + f.severity}>
-            <span className={'badge ' + (f.severity === 'warning' ? 'warn' : '')}>{f.severity === 'warning' ? 'Check' : 'Note'}</span>
+            <span className={'badge ' + (f.severity === 'warning' ? 'warn' : 'note-badge')}>
+              <Icon name={f.severity === 'warning' ? 'st-warning' : 'st-info'} size={14} />
+              {f.severity === 'warning' ? 'Check' : 'Note'}
+            </span>
             <strong>{f.checkLabel}.</strong> {f.message}
             <div className="buttons">
               {(f.fixes ?? []).map((x, i) => (
                 <button key={i} className="small" onClick={() => fix(x)}>
+                  <Icon name="chk-fix" size={16} />
                   {f.fixLabels?.[i] ?? 'Fix'}
                 </button>
               ))}
               <button className="small" onClick={() => decide(f.key, 'accepted')}>
+                <Icon name="ui-check" size={16} />
                 Keep as it is
               </button>
               <button className="small" onClick={() => { setDismissing(dismissing === f.key ? null : f.key); setNoting(null); }} aria-expanded={dismissing === f.key}>
+                <Icon name="chk-dismiss" size={16} />
                 Does not apply…
               </button>
               <button className="small" onClick={() => startNote(f.key)} aria-expanded={noting === f.key}>
+                <Icon name="chk-published" size={16} />
                 As published…
               </button>
             </div>
@@ -1032,10 +1125,12 @@ function SelfCheck({ scale, findings, notes, edit, fail }: { scale: Scale; findi
                 </div>
                 <div className="buttons">
                   <button className="small" disabled={!original.trim()} onClick={() => keepPublished(f.key)}>
+                    <Icon name="chk-published" size={16} />
                     Keep as printed
                   </button>
                   {(f.fixes ?? []).map((x, i) => (
                     <button key={i} className="small" disabled={!original.trim()} onClick={() => correct(f.key, x)}>
+                      <Icon name="chk-corrected" size={16} />
                       Correct it: {f.fixLabels?.[i] ?? 'fix'}
                     </button>
                   ))}
@@ -1063,17 +1158,24 @@ function SelfCheck({ scale, findings, notes, edit, fail }: { scale: Scale; findi
           <ul className="findings">
             {published.map((f) => (
               <li key={f.key} className="finding-row published">
-                <span className="badge note-badge">As published</span>
+                <span className="badge note-badge">
+                  <Icon name="chk-published" size={14} />
+                  As published
+                </span>
                 <strong>{f.checkLabel}.</strong> {f.message}
                 {f.reason && <span className="reason">{f.reason}</span>}
                 <button className="small" onClick={() => removeNote(f.key)}>
+                  <Icon name="chk-reopen" size={16} />
                   Reopen
                 </button>
               </li>
             ))}
             {corrected.map((n) => (
               <li key={n.key} className="finding-row published">
-                <span className="badge note-badge">Corrected</span>
+                <span className="badge note-badge">
+                  <Icon name="chk-corrected" size={14} />
+                  Corrected
+                </span>
                 <strong>{n.subject}.</strong> <span className="reason">{n.text}</span>
                 <button className="small" onClick={() => removeNote(n.key)} title="Removes the note only; the correction stays">
                   Remove note
@@ -1092,6 +1194,7 @@ function SelfCheck({ scale, findings, notes, edit, fail }: { scale: Scale; findi
                 <strong>{f.status === 'accepted' ? 'Kept as it is' : 'Dismissed'}:</strong> {f.checkLabel}. {f.message}
                 {f.reason && <span className="reason">Reason: {f.reason}</span>}
                 <button className="small" onClick={() => decide(f.key, null)}>
+                  <Icon name="chk-reopen" size={16} />
                   Reopen
                 </button>
               </li>
@@ -1164,7 +1267,12 @@ function Field({ label, children, unsure, hint }: { label: string; children: Rea
     <label className={'field' + (unsure ? ' unsure' : '')} data-unsure={unsure ? 'true' : undefined}>
       <span className="field-label">
         {label}
-        {unsure && <span className="badge warn">Check</span>}
+        {unsure && (
+          <span className="badge warn">
+            <Icon name="st-warning" size={14} />
+            Check
+          </span>
+        )}
       </span>
       {children}
       {hint && <span className="hint">{hint}</span>}
@@ -1415,6 +1523,7 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
         </Field>
         {scale.instructions.origin !== 'house' && (
           <button className="small" onClick={useHouse}>
+            <Icon name="instr-house" size={16} />
             Use house instructions for this format
           </button>
         )}
@@ -1494,6 +1603,7 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
                       />
                       {changed && (
                         <span className="badge" title={`Source text: ${it.sourceText}`}>
+                          <Icon name="item-changed" size={14} />
                           Changed from the source
                         </span>
                       )}
@@ -1501,6 +1611,7 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
                         .filter((n) => n.items.includes(it.number))
                         .map((n) => (
                           <span key={n.key} className="badge note-badge" title={n.text}>
+                            <Icon name={n.handling === 'kept' ? 'chk-published' : 'chk-corrected'} size={14} />
                             {n.handling === 'kept' ? 'As published' : 'Corrected from the source'}
                             <span className="sr-only">: {n.text}</span>
                           </span>
@@ -1522,40 +1633,51 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
                     </select>
                     {it.reverse.state === 'suggested' ? (
                       <span className="chip" role="group" aria-label={`Reverse suggestion for item ${it.number}`}>
+                        <Icon name="item-reverse-suggested" size={14} />
                         Suggested reversed: {it.reverse.reason ?? 'from the wording'}
                         <button className="small" disabled={locked} onClick={() => setItem(i, { reverse: { state: 'confirmed', reason: it.reverse.reason } })}>
+                          <Icon name="ui-check" size={14} />
                           Accept
                         </button>
                         <button className="small" disabled={locked} onClick={() => setItem(i, { reverse: { state: 'notReversed' } })}>
+                          <Icon name="ui-close" size={14} />
                           Reject
                         </button>
                       </span>
                     ) : (
-                      it.reverse.reason && <span className="reason">{it.reverse.reason}</span>
+                      it.reverse.reason && (
+                        <span className="reason">
+                          {it.reverse.state === 'confirmed' && <Icon name="item-reversed" size={14} />} {it.reverse.reason}
+                        </span>
+                      )
                     )}
                   </td>
                   <td className="actions">
-                    <button className="icon" aria-label={`Move item ${it.number} up`} onClick={() => moveItem(i, -1)} disabled={locked || i === 0}>
-                      ↑
+                    <button className="icon" aria-label={`Move item ${it.number} up`} title="Move up" onClick={() => moveItem(i, -1)} disabled={locked || i === 0}>
+                      <Icon name="ui-chevron-down" size={16} turn={180} />
                     </button>
-                    <button className="icon" aria-label={`Move item ${it.number} down`} onClick={() => moveItem(i, 1)} disabled={locked || i === scale.items.length - 1}>
-                      ↓
+                    <button className="icon" aria-label={`Move item ${it.number} down`} title="Move down" onClick={() => moveItem(i, 1)} disabled={locked || i === scale.items.length - 1}>
+                      <Icon name="ui-chevron-down" size={16} />
                     </button>
                     {!sd && (
                       <button className="icon" aria-label={`Split item ${it.number} at the cursor`} onClick={() => splitAt(i, inputs.current[i] ?? null)} disabled={locked}>
+                        <Icon name="item-split" size={16} />
                         Split
                       </button>
                     )}
                     {!sd && (
                       <button className="icon" aria-label={`Merge item ${it.number} with the next`} onClick={() => mergeWithNext(i)} disabled={locked || i === scale.items.length - 1}>
+                        <Icon name="item-merge" size={16} />
                         Merge
                       </button>
                     )}
                     <button className="icon" aria-label={`Delete item ${it.number}`} onClick={() => deleteItem(i)} disabled={locked}>
+                      <Icon name="ui-delete" size={16} />
                       Delete
                     </button>
                     {it.leadIn === undefined && (
                       <button className="icon" aria-label={`Add text above item ${it.number}`} title="Add a prompt printed above this item, such as a new perspective" onClick={() => setItem(i, { leadIn: '' })}>
+                        <Icon name="item-lead-in" size={16} />
                         Text above
                       </button>
                     )}
@@ -1568,13 +1690,15 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
         </table>
         <div className="buttons">
           <button className="small" onClick={addItem} disabled={locked}>
+            <Icon name="ui-plus" size={16} />
             Add an item
           </button>
           <button className="small" onClick={trimEmpty} disabled={locked}>
+            <Icon name="item-trim" size={16} />
             Remove empty lines at the end
           </button>
         </div>
-        {locked && <p className="muted">This is a variant: the items keep their order and reverse scoring from the original, and only their wording can change.</p>}
+        {locked && <p className="muted"><Icon name="chk-locked" size={14} /> This is a variant: the items keep their order and reverse scoring from the original, and only their wording can change.</p>}
         {scale.recode.stated && <p className="muted">The source's recode line: "{scale.recode.stated.text}"</p>}
         {scale.recode.rule.kind === 'table' && (
           <p className="muted">Recode table kept as the source writes it: {scale.recode.rule.pairs.map(([a, b]) => `${a} = ${b}`).join(', ')}</p>
@@ -1598,11 +1722,13 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
               />
             </Field>
             <button className="small align-end" onClick={() => edit((s) => ({ ...s, subscales: s.subscales.filter((_, k) => k !== i) }))}>
+              <Icon name="ui-delete" size={16} />
               Remove
             </button>
           </div>
         ))}
         <button className="small" onClick={() => edit((s) => ({ ...s, subscales: [...s.subscales, { name: 'New subscale', items: { kind: 'list', numbers: [] } }] }))}>
+          <Icon name="sub-add" size={16} />
           Add a subscale
         </button>
         <div className="row">
@@ -1742,6 +1868,7 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
             ))}
           </ul>
           <button className="small" onClick={() => edit((s) => ({ ...s, unparsed: [] }))}>
+            <Icon name="item-clear" size={16} />
             Clear the list
           </button>
         </section>

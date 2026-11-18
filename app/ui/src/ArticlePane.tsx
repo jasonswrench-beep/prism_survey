@@ -4,6 +4,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { call } from './bridge';
+import { Icon } from './Icon';
 import type { Provenance, Scale } from './types';
 
 export interface ArticlePage {
@@ -91,14 +92,14 @@ export function ArticlePane({
     <section className="article-pane" aria-label="Article page">
       <div className="page-nav">
         <button className="small" onClick={() => setPage((p) => Math.max(pages[0].number, p - 1))} disabled={page <= pages[0].number} aria-label="Previous page">
-          ←
+          <Icon name="ui-chevron-right" size={16} turn={180} />
         </button>
         <span>
           Page {page} of {pages.length}
           {info?.source === 'ocr' && <span className="badge warn">Read by text recognition</span>}
         </span>
         <button className="small" onClick={() => setPage((p) => Math.min(pages[pages.length - 1].number, p + 1))} disabled={page >= pages[pages.length - 1].number} aria-label="Next page">
-          →
+          <Icon name="ui-chevron-right" size={16} />
         </button>
       </div>
       <p className="muted small-print">Drag across the page to outline a region and read it again.</p>

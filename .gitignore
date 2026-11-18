@@ -7,3 +7,5 @@
 /local-check/
 *.doc
 !tests/fixtures/**/*.doc
+# Generated from assets/icons by app/ui/scripts/build-icons.ts on every dev, build, type check and test run.
+/app/ui/src/assets/icons.generated.ts

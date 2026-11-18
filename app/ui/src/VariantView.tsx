@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { call } from './bridge';
+import { Icon } from './Icon';
 import type { ParentChange, Scale } from './types';
 
 interface DraftRow {
@@ -165,17 +166,20 @@ export function VariantView({
               <input value={r.to} placeholder="the AI I use" onChange={(e) => setExtra((x) => x.map((y, k) => (k === i ? { ...y, to: e.target.value } : y)))} />
             </label>
             <button className="small align-end" onClick={() => setExtra((x) => x.filter((_, k) => k !== i))} aria-label={`Remove replacement ${i + 1}`}>
+              <Icon name="ui-delete" size={16} />
               Remove
             </button>
           </div>
         ))}
         <div className="buttons">
           <button className="small" onClick={() => setExtra((x) => [...x, { from: '', to: '' }])}>
+            <Icon name="ui-plus" size={16} />
             Add wording to replace
           </button>
         </div>
         <div className="buttons">
-          <button onClick={makeDraft} disabled={busy || !oldTarget.trim() || !newTarget.trim()}>
+          <button className="primary" onClick={makeDraft} disabled={busy || !oldTarget.trim() || !newTarget.trim()}>
+            <Icon name="var-replace" />
             Replace the target words
           </button>
           <button onClick={onCancel}>Cancel</button>
@@ -195,6 +199,7 @@ export function VariantView({
       </p>
       <div className="buttons">
         <button className="small" onClick={() => setRows((rs) => rs.map((r) => (r.decision === 'open' ? { ...r, decision: 'accepted' } : r)))} disabled={open === 0}>
+          <Icon name="var-accept-all" size={16} />
           Accept the rest as shown
         </button>
       </div>
@@ -241,9 +246,11 @@ export function VariantView({
                 </td>
                 <td className="actions">
                   <button className="small" aria-pressed={st.decision === 'accepted'} onClick={() => setRow(i, { decision: 'accepted' })}>
+                    <Icon name="ui-check" size={16} />
                     Accept
                   </button>
                   <button className="small" aria-pressed={st.decision === 'flagged'} onClick={() => setRow(i, { decision: st.decision === 'flagged' ? 'open' : 'flagged' })}>
+                    <Icon name="var-flag" size={16} />
                     {st.decision === 'flagged' ? 'Unflag' : 'Flag…'}
                   </button>
                 </td>
@@ -253,7 +260,8 @@ export function VariantView({
         </tbody>
       </table>
       <div className="buttons">
-        <button onClick={finish} disabled={open > 0 || badFlag}>
+        <button className="primary" onClick={finish} disabled={open > 0 || badFlag}>
+          <Icon name="cmd-variant" />
           Make the variant
         </button>
         <button onClick={() => setDraft(null)}>Back</button>
@@ -313,7 +321,10 @@ export function VariantPanel({
   };
   return (
     <section className="panel variant-link" aria-labelledby="vlink-h">
-      <h2 id="vlink-h">Adapted variant</h2>
+      <h2 id="vlink-h">
+        <Icon name="lib-variant" />
+        Adapted variant
+      </h2>
       <p>
         Adapted from <strong>{v.parentTitle}</strong> (its saved version {v.parentVersion}): "{v.oldTarget}" changed to "{v.newTarget}"{v.context ? ` (${v.context})` : ''}.
       </p>
@@ -331,10 +342,12 @@ export function VariantPanel({
                 <div className="buttons">
                   {c.kind !== 'itemCount' && (
                     <button className="small" onClick={() => carry(c)} disabled={!parentPath}>
+                      <Icon name="var-carry" size={16} />
                       Carry into the variant
                     </button>
                   )}
                   <button className="small" onClick={() => decline(c)}>
+                    <Icon name="var-leave" size={16} />
                     Leave it
                   </button>
                 </div>

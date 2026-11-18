@@ -6,9 +6,16 @@
   "license": "Apache-2.0",
   "type": "module",
   "scripts": {
+    "icons": "tsx scripts/build-icons.ts",
+    "icons:check": "tsx scripts/build-icons.ts --check",
+    "predev": "npm run icons",
     "dev": "vite --port 5174 --strictPort",
+    "prebuild": "npm run icons",
     "build": "tsc --noEmit && vite build",
+    "pretypecheck": "npm run icons",
     "typecheck": "tsc --noEmit",
+    "pretest": "npm run icons",
+    "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "tauri": "tauri"
   },
   "dependencies": {
@@ -19,9 +26,11 @@
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.12.4",
+    "@types/node": "^26.6.6",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.2.1",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2",
     "vite": "^8.3.5"
   }

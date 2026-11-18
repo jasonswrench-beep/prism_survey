@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { call } from './bridge';
 import type { Scale } from './types';
 import { FORMAT_LABEL } from './types';
+import { Icon } from './Icon';
 
 export type Part =
   | { kind: 'scale'; scale: Scale; libraryPath?: string }
@@ -105,7 +106,10 @@ export function StudyBuilder({
   return (
     <div className="form">
       <section className="panel" aria-labelledby="study-h">
-        <h2 id="study-h">Study</h2>
+        <h2 id="study-h">
+          <Icon name="view-study" />
+          Study
+        </h2>
         <div className="row">
           <label className="field">
             <span className="field-label">Study title</span>
@@ -114,7 +118,7 @@ export function StudyBuilder({
         </div>
         {length && (
           <p className="muted">
-            {study.parts.filter((p) => p.kind === 'scale').length} scales, {length.items} items, about {length.minutes} minutes to complete.
+            <Icon name="ui-clock" size={14} /> {study.parts.filter((p) => p.kind === 'scale').length} scales, {length.items} items, about {length.minutes} minutes to complete.
           </p>
         )}
       </section>
@@ -140,7 +144,7 @@ export function StudyBuilder({
               >
                 <div className="part-head">
                   <span className="drag-handle" aria-hidden="true">
-                    ⋮⋮
+                    <Icon name="ui-drag" size={16} />
                   </span>
                   <strong>{p.kind === 'scale' ? `${n}. ${partLabel(p)}` : partLabel(p)}</strong>
                   {p.kind === 'scale' && (
@@ -152,16 +156,18 @@ export function StudyBuilder({
                   <span className="part-actions">
                     {p.kind === 'scale' && (
                       <button className="small" onClick={() => openScale(p.scale, i)}>
+                        <Icon name="ui-edit" size={16} />
                         Edit
                       </button>
                     )}
-                    <button className="icon" aria-label={`Move ${partLabel(p)} up`} onClick={() => move(i, i - 1)} disabled={i === 0}>
-                      ↑
+                    <button className="icon" aria-label={`Move ${partLabel(p)} up`} title="Move up" onClick={() => move(i, i - 1)} disabled={i === 0}>
+                      <Icon name="ui-chevron-down" size={16} turn={180} />
                     </button>
-                    <button className="icon" aria-label={`Move ${partLabel(p)} down`} onClick={() => move(i, i + 1)} disabled={i === study.parts.length - 1}>
-                      ↓
+                    <button className="icon" aria-label={`Move ${partLabel(p)} down`} title="Move down" onClick={() => move(i, i + 1)} disabled={i === study.parts.length - 1}>
+                      <Icon name="ui-chevron-down" size={16} />
                     </button>
                     <button className="icon" aria-label={`Remove ${partLabel(p)}`} onClick={() => remove(i)}>
+                      <Icon name="ui-delete" size={16} />
                       Remove
                     </button>
                   </span>
@@ -192,6 +198,7 @@ export function StudyBuilder({
         <div className="buttons wrap">
           {currentScale && (
             <button className="small" onClick={() => add({ kind: 'scale', scale: currentScale })}>
+              <Icon name="study-add" size={16} />
               Add the scale on the form
             </button>
           )}
@@ -202,15 +209,19 @@ export function StudyBuilder({
               if (found.length) set({ parts: [...study.parts, ...found.map((scale): Part => ({ kind: 'scale', scale }))] });
             }}
           >
+            <Icon name="cmd-import" size={16} />
             Import a stored scale or questionnaire…
           </button>
           <button className="small" onClick={() => add({ kind: 'pageBreak' })}>
+            <Icon name="study-page-break" size={16} />
             Add a page break
           </button>
           <button className="small" onClick={() => add({ kind: 'transition', text: '' })}>
+            <Icon name="study-transition" size={16} />
             Add a transition sentence
           </button>
           <button className="small" onClick={() => add({ kind: 'demographics', title: 'About you', text: 'What is your age? ______\nWhat is your gender? ______' })}>
+            <Icon name="study-demographics" size={16} />
             Add demographic questions
           </button>
           <button
@@ -225,6 +236,7 @@ export function StudyBuilder({
               }
             }}
           >
+            <Icon name="study-refresh" size={16} />
             Bring scales up to date from the library
           </button>
         </div>
@@ -245,6 +257,7 @@ export function StudyBuilder({
         </div>
         <div className="buttons">
           <button className="small" onClick={suggest} disabled={!study.parts.some((p) => p.kind === 'scale')}>
+            <Icon name="study-suggest" size={16} />
             Suggest measures
           </button>
         </div>
@@ -261,6 +274,7 @@ export function StudyBuilder({
                 </ul>
                 {r.key.startsWith('dir:') ? (
                   <button className="small" onClick={() => showDirectoryEntry(r.key.slice(4))}>
+                    <Icon name="view-directory" size={16} />
                     Show in the Comm Directory
                   </button>
                 ) : (
@@ -271,6 +285,7 @@ export function StudyBuilder({
                       setRecs(recs.filter((x) => x.key !== r.key));
                     }}
                   >
+                    <Icon name="study-add" size={16} />
                     Add to the study
                   </button>
                 )}

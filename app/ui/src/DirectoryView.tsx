@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import type React from 'react';
 import { call } from './bridge';
+import { Icon } from './Icon';
 
 export interface Entry {
   id: string;
@@ -162,6 +163,7 @@ export function DirectoryView({
         {info.hasIntroduction && (
           <div className="buttons">
             <button className="small" onClick={showIntro} aria-pressed={!!intro}>
+              <Icon name="set-about" size={16} />
               About this directory
             </button>
           </div>
@@ -172,7 +174,10 @@ export function DirectoryView({
             <input type="search" value={query} placeholder='Words, "a phrase", purpose:, author:' onChange={(e) => setQuery(e.target.value)} />
           </label>
           <label className="field">
-            <span className="field-label">Chapter</span>
+            <span className="field-label">
+              <Icon name="dir-chapter" size={14} />
+              Chapter
+            </span>
             <select value={chapter} onChange={(e) => setChapter(e.target.value)}>
               <option value="">All chapters</option>
               {info.chapters?.map((c) => (
@@ -224,7 +229,9 @@ export function DirectoryView({
             <dt>Source (APA 7)</dt>
             <dd className="hanging">{entry.sourceApa7}</dd>
             {entry.referenceCheck && (
-              <dd className={entry.referenceCheck.startsWith('Check') ? 'finding' : 'muted'}>{entry.referenceCheck}</dd>
+              <dd className={entry.referenceCheck.startsWith('Check') ? 'finding' : 'muted'}>
+                <Icon name={entry.referenceCheck.startsWith('Check') ? 'dir-ref-check' : 'dir-ref-checked'} size={14} /> {entry.referenceCheck}
+              </dd>
             )}
             {entry.relatedResearch && entry.relatedResearch.length > 0 && (
               <>
@@ -241,15 +248,25 @@ export function DirectoryView({
           </dl>
           <p className="muted">The directory describes the measure; its items are in the source article. Bring the measure in one of these ways:</p>
           <div className="buttons wrap">
-            <button onClick={() => onFindInArticle(entry)}>Find it in the article (PDF)…</button>
-            <button onClick={() => onImportStored(entry)}>Import a stored copy…</button>
-            <button onClick={() => onStartBlank(entry)}>Type it into a blank scale</button>
+            <button onClick={() => onFindInArticle(entry)}>
+              <Icon name="cmd-find-article" />
+              Find it in the article (PDF)…
+            </button>
+            <button onClick={() => onImportStored(entry)}>
+              <Icon name="cmd-import" />
+              Import a stored copy…
+            </button>
+            <button onClick={() => onStartBlank(entry)}>
+              <Icon name="fmt-blank-line" />
+              Type it into a blank scale
+            </button>
             <button
               className="small"
               onClick={() => {
                 navigator.clipboard.writeText(entry.sourceApa7).catch(() => {});
               }}
             >
+              <Icon name="ui-copy" size={16} />
               Copy the reference
             </button>
           </div>

@@ -25,3 +25,6 @@ The Word 97-2003 reader follows Microsoft's published [MS-DOC] file format speci
 
 The PDF text and page drawing code adapts PrismQDA's PDF importer and page viewer (Apache License 2.0, same author).
 Text recognition calls the recogniser built into Windows; no recognition engine is bundled.
+
+The 31 interface icons in assets/icons that the icon brief (design/icons) marks as reused are copied unchanged from
+PrismQDA's icon set (Apache License 2.0, same author).
