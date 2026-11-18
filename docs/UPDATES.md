@@ -54,7 +54,8 @@ once. The key and its password never pass through anyone else.
    needs a higher version than the one before it, or the button won't offer it.
 2. Commit everything and tag the commit `v<version>` (`CLAUDE.md`). Write what is new in the tag's message: it becomes the
    notes the button shows.
-3. Build with `app\BUILD-INSTALLER.ps1 -Sign -Updates`. It finds the key in your profile folder, stops before building if
+3. Double-click `BUILD SIGNED PRISM SURVEY RELEASE.bat` (it runs `app\BUILD-INSTALLER.ps1 -Sign -Updates`; the signing
+   settings `OPENSTAGE_SIGN_*` must be set in Windows). It finds the key in your profile folder, stops before building if
    `PUBKEY` is not its public half, and asks for the password. It writes `latest.json` beside the installer, and
    `previous.json` (the published release's `latest.json`) when there is one.
 4. Publish the release `v<version>` as a **full release** (not a pre-release), with the installer, its `.sha256.txt`,

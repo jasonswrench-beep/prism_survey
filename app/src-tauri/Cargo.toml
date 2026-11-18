@@ -1,6 +1,6 @@
 [package]
 name = "prismsurvey-app"
-version = "0.1.0"
+version = "0.2.0"
 description = "The Prism Survey desktop app: a Tauri window around the engine and the React interface."
 edition = "2021"
 rust-version = "1.92"

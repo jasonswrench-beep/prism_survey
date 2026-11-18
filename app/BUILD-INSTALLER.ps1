@@ -5,7 +5,8 @@
 #   powershell -ExecutionPolicy Bypass -File app\BUILD-INSTALLER.ps1 -Sign -Updates
 #                                                   the same, also signed for the Help tab's Check for Updates
 #
-# BUILD PRISM SURVEY INSTALLER.bat in the project folder runs the first form.
+# BUILD PRISM SURVEY INSTALLER.bat in the project folder runs the first form, and BUILD SIGNED PRISM SURVEY RELEASE.bat
+# the last.
 #
 # Needs Rust, Node.js and, on the first run, a network connection: npm packages, Rust crates and Tauri's installer
 # tools (NSIS) are downloaded once. Like the sibling Prism tools, the build runs on CPUs 16 to 31, the efficiency cores,

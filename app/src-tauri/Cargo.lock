@@ -3160,7 +3160,7 @@ checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
 
 [[package]]
 name = "prismsurvey-api"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-core",
  "prismsurvey-detect",
@@ -3173,7 +3173,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-app"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-api",
  "semver",
@@ -3187,7 +3187,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "regex",
  "serde",
@@ -3198,7 +3198,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-detect"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "hayro",
  "image",
@@ -3213,7 +3213,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-docx"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-core",
  "serde",
@@ -3222,7 +3222,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-import"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "cfb",
  "encoding_rs",
@@ -4581,7 +4581,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",

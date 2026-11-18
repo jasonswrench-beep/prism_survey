@@ -51,4 +51,4 @@ if ($NoSource) {
 }
 ""
 "Now: BACK UP $key and $key.pub, offline, with the password."
-"Release builds then sign updates with it: BUILD PRISM SURVEY INSTALLER.bat with -Sign -Updates (docs\UPDATES.md)."
+"Release builds then sign updates with it: BUILD SIGNED PRISM SURVEY RELEASE.bat (docs\UPDATES.md)."

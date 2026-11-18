@@ -952,7 +952,7 @@ checksum = "78451badbdaebaf17f053fd9152b3ffb33b516104eacb45e7864aaa9c712f306"
 
 [[package]]
 name = "prismsurvey-api"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-core",
  "prismsurvey-detect",
@@ -966,7 +966,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-cli"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-api",
  "prismsurvey-core",
@@ -980,7 +980,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-core"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "regex",
  "serde",
@@ -992,7 +992,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-detect"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "hayro",
  "image",
@@ -1007,7 +1007,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-docx"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "prismsurvey-core",
  "prismsurvey-import",
@@ -1017,7 +1017,7 @@ dependencies = [
 
 [[package]]
 name = "prismsurvey-import"
-version = "0.1.0"
+version = "0.2.0"
 dependencies = [
  "cfb",
  "encoding_rs",
