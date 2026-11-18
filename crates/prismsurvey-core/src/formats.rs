@@ -184,6 +184,225 @@ pub fn classify_labels(labels: &[String]) -> AnchorSet {
     }
 }
 
+/// Five-point label sets offered on the form as a starting point (Jason's figure of Likert-type anchors, decision 75),
+/// lowest first, as printed. Choosing one fills the labels; the scale keeps them as its own (custom) labels.
+pub const COMMON_ANCHORS: &[[&str; 5]] = &[
+    [
+        "Strongly disagree",
+        "Disagree",
+        "Neutral",
+        "Agree",
+        "Strongly Agree",
+    ],
+    ["Never", "Rarely", "Sometimes", "Often", "Always"],
+    [
+        "Definitely not possible",
+        "Very unlikely",
+        "Don’t know",
+        "Somewhat likely",
+        "Extremely likely",
+    ],
+    [
+        "Not at all",
+        "To a little extent",
+        "To some extent",
+        "To a great extent",
+        "To a very great extent",
+    ],
+    [
+        "Not concerned at all",
+        "Not really concerned",
+        "Somewhat concerned",
+        "Concerned",
+        "Very concerned",
+    ],
+    [
+        "Definitely false",
+        "Possibly false",
+        "Don’t know",
+        "Possibly true",
+        "Definitely true",
+    ],
+    ["None", "Very mild", "Mild", "Moderate", "Severe"],
+    [
+        "Lacking or ineffective",
+        "Below average",
+        "Average",
+        "Above average",
+        "Excellent",
+    ],
+    [
+        "Very unrealistic",
+        "Unrealistic",
+        "Not sure",
+        "Realistic",
+        "Very Realistic",
+    ],
+    ["NO", "no", "?", "yes", "YES"],
+    ["Poor", "Fair", "Good", "Very good", "Excellent"],
+    [
+        "Not important",
+        "Somewhat important",
+        "Important",
+        "Very important",
+        "Extremely important",
+    ],
+    [
+        "Substantially worse",
+        "Somewhat worse",
+        "About the same",
+        "Somewhat better",
+        "Substantially better",
+    ],
+    [
+        "Very dissatisfied",
+        "Dissatisfied",
+        "Neither dissatisfied nor satisfied",
+        "Satisfied",
+        "Very satisfied",
+    ],
+    ["1–20%", "21–40%", "41–60%", "61–80%", "81–100%"],
+    [
+        "Definitely did not use",
+        "Rarely used",
+        "Used moderately",
+        "Above average use",
+        "Great use",
+    ],
+    [
+        "Absolutely do not agree",
+        "Do not agree",
+        "Neither agree nor disagree",
+        "Agree",
+        "Absolutely Agree",
+    ],
+    [
+        "Not at all like me",
+        "Not really like me",
+        "Neither like me nor dislike me",
+        "Somewhat like me",
+        "Definitely like me",
+    ],
+    ["F", "D", "C", "B", "A"],
+    ["Not at all", "Somewhat", "Moderately", "Quite", "Extremely"],
+    [
+        "No Chance",
+        "Very little chance",
+        "Not sure",
+        "Good chance",
+        "Certain to happen",
+    ],
+    [
+        "Far below expected level",
+        "Below expected level",
+        "At expected level",
+        "Above expected level",
+        "Far above expected level",
+    ],
+    [
+        "Extremely negative",
+        "Moderately negative",
+        "Neither positive nor negative",
+        "Moderately positive",
+        "Extremely positive",
+    ],
+    [
+        "Have not",
+        "Have slightly",
+        "Have moderately",
+        "Have mostly",
+        "Have fully",
+    ],
+    ["Very bad", "Rather bad", "Neutral", "Good", "Very good"],
+    [
+        "Never",
+        "Occasionally (once or twice altogether)",
+        "Regularly (once or twice a year)",
+        "Often (several times a year)",
+        "Very often (about weekly)",
+    ],
+    [
+        "Not at all",
+        "Slightly",
+        "Moderately",
+        "Markedly",
+        "Extremely",
+    ],
+    [
+        "Very much a loner",
+        "Moderately a loner",
+        "Average",
+        "Somewhat socially sought after",
+        "Very socially sought after",
+    ],
+    [
+        "None",
+        "Slightly",
+        "No opinion",
+        "Moderately",
+        "Extensively",
+    ],
+    [
+        "Definitely would not do this",
+        "Might not do this",
+        "Not sure whether I would do this",
+        "Might do this",
+        "Would definitely do this",
+    ],
+    [
+        "I reject this",
+        "I am inclined to reject this",
+        "I neither reject nor accept this",
+        "I accept this as important",
+        "I accept this as of the greatest importance",
+    ],
+    [
+        "Extremely Conservative",
+        "Conservative",
+        "Moderate: Middle of the road",
+        "Progressive",
+        "Extremely progressive",
+    ],
+    ["– –", "–", "0", "+", "++"],
+    [
+        "Infrequently",
+        "Fairly infrequently",
+        "No opinion",
+        "Fairly frequently",
+        "Frequently",
+    ],
+];
+
+/// A response scale with labels the person chose (a common set from the form, or their own), kept as a custom set.
+/// When the labels fit the point count every point is labelled; otherwise the first and last label become the ends.
+pub fn labelled_scale(points: u8, labels: &[String]) -> ResponseScale {
+    let points = points.clamp(MIN_POINTS, MAX_POINTS);
+    let given: Vec<Option<String>> = labels
+        .iter()
+        .map(|l| Some(l.trim().to_string()).filter(|l| !l.is_empty()))
+        .collect();
+    let (label_mode, labels) = if given.len() == points as usize {
+        (LabelMode::Every, given)
+    } else {
+        let mut v = vec![None; points as usize];
+        v[0] = given.first().cloned().flatten();
+        v[points as usize - 1] = given.last().cloned().flatten();
+        (LabelMode::EndsOnly, v)
+    };
+    let abbreviations = labels
+        .iter()
+        .map(|l| l.as_deref().map(abbreviate).unwrap_or_default())
+        .collect();
+    ResponseScale {
+        points,
+        anchor_set: AnchorSet::Custom,
+        label_mode,
+        labels,
+        abbreviations,
+        values: (1..=points as i32).collect(),
+    }
+}
+
 /// Words that mark a line as an anchor row in a stored scale or an article.
 pub const ANCHOR_WORDS: &[&str] = &[
     "strongly disagree",
@@ -252,6 +471,29 @@ mod tests {
             ["Never", "Rarely", "Occasionally", "Often", "Very Often"]
         );
         assert_eq!(classify_labels(&l), AnchorSet::Frequency);
+    }
+
+    #[test]
+    fn the_common_sets_have_five_labels_each_and_no_empty_ones() {
+        assert_eq!(COMMON_ANCHORS.len(), 34);
+        for set in COMMON_ANCHORS {
+            assert!(set.iter().all(|l| !l.trim().is_empty()), "{set:?}");
+        }
+    }
+
+    #[test]
+    fn a_chosen_set_fills_every_point_at_five_and_the_ends_otherwise() {
+        let set: Vec<String> = COMMON_ANCHORS[11].iter().map(|s| s.to_string()).collect();
+        let r = labelled_scale(5, &set);
+        assert_eq!(r.anchor_set, AnchorSet::Custom);
+        assert_eq!(r.label_mode, LabelMode::Every);
+        assert_eq!(r.labels[2].as_deref(), Some("Important"));
+        assert_eq!(r.abbreviations[0], "NI");
+        let r = labelled_scale(7, &set);
+        assert_eq!(r.label_mode, LabelMode::EndsOnly);
+        assert_eq!(r.labels[0].as_deref(), Some("Not important"));
+        assert_eq!(r.labels[6].as_deref(), Some("Extremely important"));
+        assert!(r.labels[3].is_none());
     }
 
     #[test]

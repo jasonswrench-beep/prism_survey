@@ -10,6 +10,8 @@
 //!   scale.setFormat { scale, format }            -> { scale, outcome }
 //!   scale.setPoints { scale, points }            -> { scale, outcome }
 //!   scale.setAnchors { scale, anchorSet, labelMode } -> { scale, outcome }
+//!   scale.setLabels { scale, labels }            -> { scale, outcome }
+//!   anchors.common                               -> [[label; 5]]
 //!   scale.editInstructions { scale, text }       -> Scale
 //!   scale.useHouseInstructions { scale, stem? }  -> Scale
 //!   scale.parseSelector { text }                 -> ItemSelector
@@ -21,7 +23,7 @@
 
 pub mod refman;
 
-use prismsurvey_core::formats::response_scale;
+use prismsurvey_core::formats::{labelled_scale, response_scale, COMMON_ANCHORS};
 use prismsurvey_core::instructions::{fit_findings, is_forced_choice, FitFinding};
 use prismsurvey_core::recommend::Measure;
 use prismsurvey_core::scale::{
@@ -454,6 +456,14 @@ impl Api {
                 let out = scale::set_response(&mut s, r);
                 with_outcome(s, out)
             }
+            "scale.setLabels" => {
+                let mut s: Scale = arg(&args, "scale")?;
+                let labels: Vec<String> = arg(&args, "labels")?;
+                let r = labelled_scale(s.response.points, &labels);
+                let out = scale::set_response(&mut s, r);
+                with_outcome(s, out)
+            }
+            "anchors.common" => to_value(COMMON_ANCHORS),
             "scale.editInstructions" => {
                 let mut s: Scale = arg(&args, "scale")?;
                 let text: String = arg(&args, "text")?;
@@ -1132,6 +1142,31 @@ mod tests {
     fn api() -> (Api, tempfile::TempDir) {
         let dir = tempfile::tempdir().unwrap();
         (Api::new(&dir.path().join("config"), dir.path()), dir)
+    }
+
+    #[test]
+    fn a_common_anchor_set_fills_the_labels_as_custom_ones() {
+        let (mut api, _dir) = api();
+        let s = api
+            .call("scale.new", json!({ "format": "likertBoxGrid" }))
+            .unwrap();
+        let sets = api.call("anchors.common", Value::Null).unwrap();
+        let poor_to_excellent = sets
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|s| s[0] == "Poor")
+            .unwrap()
+            .clone();
+        let r = api
+            .call(
+                "scale.setLabels",
+                json!({ "scale": s, "labels": poor_to_excellent }),
+            )
+            .unwrap();
+        assert_eq!(r["scale"]["response"]["anchorSet"], "custom");
+        assert_eq!(r["scale"]["response"]["labels"][3], "Very good");
+        assert_eq!(r["scale"]["response"]["abbreviations"][3], "VG");
     }
 
     #[test]

@@ -1286,6 +1286,14 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
   const sd = scale.format === 'semanticDifferential';
   const lowConfidence = scale.provenance.filter((p) => p.confidence < 0.7);
   const [selectorDrafts, setSelectorDrafts] = useState<Record<number, string>>({});
+  const [commonSets, setCommonSets] = useState<string[][]>([]);
+  const [countDraft, setCountDraft] = useState<string | null>(null);
+
+  useEffect(() => {
+    call<string[][]>('anchors.common')
+      .then(setCommonSets)
+      .catch(() => setCommonSets([]));
+  }, []);
 
   async function setFormat(format: Format) {
     try {
@@ -1309,6 +1317,30 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
       fail(e);
     }
   }
+  async function useCommonSet(i: number) {
+    const labels = commonSets[i];
+    if (!labels) return;
+    try {
+      applyOutcome(await call('scale.setLabels', { scale, labels }), `Labels are now ${labels[0]} to ${labels[labels.length - 1]}`);
+    } catch (e) {
+      fail(e);
+    }
+  }
+  /// Sets how many item rows the scale has: empty rows are added at the end, or rows are taken from the end. Rows that
+  /// would go and have text are only taken after the person agrees.
+  function setItemCount(raw: string) {
+    setCountDraft(null);
+    const n = parseInt(raw, 10);
+    if (!Number.isFinite(n) || n < 0 || n === scale.items.length) return;
+    const going = scale.items.slice(n).filter((it) => it.text.trim() || (it.left ?? '').trim() || (it.right ?? '').trim());
+    if (going.length && !window.confirm(`Items ${going.map((it) => it.number).join(', ')} have text. Remove them?`)) return;
+    edit((s) => {
+      const items = s.items.slice(0, n);
+      while (items.length < n) items.push({ number: 0, text: '', reverse: { state: 'notReversed' }, ...(sd ? { left: '', right: '' } : {}) });
+      return { ...s, items: renumber(items) };
+    });
+  }
+
   async function useHouse() {
     try {
       const s = await call<Scale>('scale.useHouseInstructions', { scale });
@@ -1428,6 +1460,25 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
               ))}
             </select>
           </Field>
+          <Field label="Number of items" hint="Rows are added or taken at the end.">
+            <input
+              type="number"
+              min={0}
+              max={500}
+              disabled={locked}
+              value={countDraft ?? String(scale.items.length)}
+              onChange={(e) => setCountDraft(e.target.value)}
+              onBlur={(e) => setItemCount(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  setItemCount((e.target as HTMLInputElement).value);
+                } else if (e.key === 'Escape') {
+                  setCountDraft(null);
+                }
+              }}
+            />
+          </Field>
           <Field label="Points" unsure={unsure.has('anchors')}>
             <input type="number" min={2} max={11} disabled={locked} value={scale.response.points} onChange={(e) => setPoints(parseInt(e.target.value, 10))} />
           </Field>
@@ -1445,6 +1496,18 @@ function ConfirmForm({ onFocusField, parentChanges, scale, knownTags, notes, che
             </select>
           </Field>
         </div>
+        {commonSets.length > 0 && (
+          <Field label="Fill the labels from a common set" hint="Five labels each; at another point count the first and last become the ends. Edit them below as needed.">
+            <select value="" disabled={locked} onChange={(e) => e.target.value !== '' && useCommonSet(parseInt(e.target.value, 10))}>
+              <option value="">Choose a set…</option>
+              {commonSets.map((set, i) => (
+                <option key={i} value={i}>
+                  {set.join(', ')}
+                </option>
+              ))}
+            </select>
+          </Field>
+        )}
         {check?.forcedChoice && <p className="finding">An even point count has no middle: this scale is forced choice.</p>}
         <fieldset className="plain" disabled={locked}>
         <table className="anchors">

@@ -11,6 +11,8 @@ The window sends every request through one Tauri command, `call`, with a command
 | `scale.setFormat` | `scale`, `format` | `{ scale, outcome }`; `outcome.instructionsRewritten`, or `outcome.findings` for verbatim or edited instructions. |
 | `scale.setPoints` | `scale`, `points` (2 to 11) | `{ scale, outcome }` |
 | `scale.setAnchors` | `scale`, `anchorSet`, `labelMode` | `{ scale, outcome }` |
+| `scale.setLabels` | `scale`, `labels` (lowest first) | `{ scale, outcome }`: custom labels on every point when they fit the point count, else the first and last as the ends |
+| `anchors.common` | | the five-point label sets the form offers, lowest first |
 | `scale.editInstructions` | `scale`, `text` | The scale, its instructions now marked edited. |
 | `scale.useHouseInstructions` | `scale`, `stem` (optional) | The scale with house instructions for its format. |
 | `scale.parseSelector` | `text` ("1, 3, 5", "1-5", "odd", "even") | An item selector. |
