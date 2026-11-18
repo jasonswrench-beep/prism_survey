@@ -27,7 +27,7 @@ pub const ROLLBACK_ENDPOINT: &str = "https://github.com/jasonswrench-beep/prism_
 
 /// The public half of the update key (the text of the `.pub` file `tools/make-update-key.ps1` makes). Empty until that
 /// is done, and then the updater is "not set up".
-pub const PUBKEY: &str = "";
+pub const PUBKEY: &str = "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDQwNTc5NUFFMjNCNDNBODQKUldTRU9yUWpycFZYUURUcW5GcGF6ZWh5bnRzb1NmQ2kwbmxyZGhHd1ZYNVl2Q1ZrdU1TSi9TaXMK";
 
 /// Where to look and what to trust. The tests make their own, pointed at a server on this computer.
 #[derive(Clone, Debug)]
